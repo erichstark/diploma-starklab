@@ -7,9 +7,11 @@ var io = require('socket.io').listen(server);
 
 var bodyParser = require('body-parser');
 app.use(bodyParser());
+app.use("/", express.static(__dirname + '/app/'));
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    console.log("DIRNAME: ", __dirname);
+    res.sendFile(__dirname + '/app/views/index.html');
 });
 
 app.get('/listUsers', function (req, res) {
