@@ -1,7 +1,7 @@
 (function (angular) {
     "use strict";
     angular.module("starkLab.services", [])
-        .factory("socket", function ($rootScope) {
+        .factory("socketio", function ($rootScope) {
             var socket = io.connect();
             return {
                 on: function (eventName, callback) {

@@ -2,53 +2,6 @@
 <html>
 <head>
 	<title>Socket.IO chat</title>
-	<!--<style>-->
-	<!--* {-->
-	<!--margin: 0;-->
-	<!--padding: 0;-->
-	<!--box-sizing: border-box;-->
-	<!--}-->
-
-	<!--body {-->
-	<!--font: 13px Helvetica, Arial;-->
-	<!--}-->
-
-	<!--form {-->
-	<!--background: #000;-->
-	<!--padding: 3px;-->
-	<!--position: fixed;-->
-	<!--bottom: 0;-->
-	<!--width: 100%;-->
-	<!--}-->
-
-	<!--form input {-->
-	<!--border: 0;-->
-	<!--padding: 10px;-->
-	<!--width: 90%;-->
-	<!--margin-right: .5%;-->
-	<!--}-->
-
-	<!--form button {-->
-	<!--width: 9%;-->
-	<!--background: rgb(130, 224, 255);-->
-	<!--border: none;-->
-	<!--padding: 10px;-->
-	<!--}-->
-
-	<!--#messages {-->
-	<!--list-style-type: none;-->
-	<!--margin: 0;-->
-	<!--padding: 0;-->
-	<!--}-->
-
-	<!--#messages li {-->
-	<!--padding: 5px 10px;-->
-	<!--}-->
-
-	<!--#messages li:nth-child(odd) {-->
-	<!--background: #eee;-->
-	<!--}-->
-	<!--</style>-->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.1/angular.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
@@ -61,78 +14,31 @@
 	<script src="../directives/directives.js"></script>
 </head>
 <body ng-app="starkLab">
-<ul id="messages"></ul>
-<!--<form action="">-->
-<!--<input id="m" autocomplete="off"/>-->
-<!--<button>Send</button>-->
-<!--</form>-->
 <canvas id="updating-chart" width="1200" height="300"></canvas>
 
-<div ng-controller="GreetingController">
-	<a href="#" class="button" ng-click="addRow()">Add Row {{counter}}</a>
-
+<div ng-controller="TableCtrl">
 	<table>
 		<thead>
 		<tr>
-			<th width="200">Some Header</th>
+			<th width="100">Data time</th>
+			<th width="100">Data x</th>
+			<th width="100">Data y</th>
+			<th width="100">Data vy</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr ng-repeat="rowContent in rows">
-			<td>{{rowContent}}</td>
+			<td>{{rowContent.time}}</td>
+			<td>{{rowContent.x}}</td>
+			<td>{{rowContent.y}}</td>
+			<td>{{rowContent.vy}}</td>
 		</tr>
 		</tbody>
 	</table>
 </div>
 
 
-
-
-
 <script>
-	var socket = io();
-	$('form').submit(function () {
-		socket.emit('chat message', $('#m').val());
-		$('#m').val('');
-		return false;
-	});
-	socket.on('message', function (msg) {
-
-		//console.log("Msg: ", msg.data.x);
-		//$('#messages').append($('<li>').text(msg));
-
-//		for (var i = 0; i < msg.data.x.length; i++) {
-//			console.log("Msg: ", i, msg.data.x[i]);
-//			myLiveChart.addData(msg.data.x[i], ++latestLabel)
-//		}
-		//console.log("Msg: ", Array.isArray(msg.data.time));
-
-		console.log("Msg: ", msg);
-		if (Array.isArray(msg.data.time)) {
-			//for (var i = 0; i < msg.data.x.length; i++) {
-			//var label = "[ " +  msg.data.x[0] + ", " + msg.data.y[0] + " ]";
-			myLiveChart.addData([msg.data.y[0]], msg.data.x[0]);
-			//myLiveChart.addData([msg.data.y[10]], msg.data.x[10]);
-			//myLiveChart.datasets[0].data.push(msg.data.y[0]);
-			//myLiveChart.datasets[0].data.push(msg.data.y[0]);
-			console.log("live: ", myLiveChart.datasets[0].points);
-
-			$scope.addRow();
-
-			// kazdu 10 tu
-			//for (var i = 0)
-
-
-			//}
-
-		}
-		//if () {}
-
-		//myLiveChart.addData([msg.data.x[0], msg.data.y[0]], ++latestLabel);
-
-		//myLiveChart.addData([msg.data.x[0], Math.random() * 100], ++latestLabel);
-	});
-
 	var canvas = document.getElementById('updating-chart'),
 			ctx = canvas.getContext('2d'),
 			startingData = {
@@ -164,15 +70,6 @@
 		animationSteps: 15,
 		scaleGridLineColor: 'lightgray'
 	});
-
-
-	//	setInterval(function(){
-	//		// Add two random numbers for each dataset
-	//		//myLiveChart.addData([Math.random() * 100, Math.random() * 100], ++latestLabel);
-	//		myLiveChart.addData([Math.random() * 100, Math.random() * 100], ++latestLabel);
-	//		// Remove the first point so we dont just add values forever
-	//		//myLiveChart.removeData();
-	//	}, 5000);
 
 </script>
 </body>
