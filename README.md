@@ -15,3 +15,6 @@ HTML,CS:
 Charts:
 Horizontal projection
 - draw speed vy with y in the same graph
+
+Licence:
+- add GPL to files
