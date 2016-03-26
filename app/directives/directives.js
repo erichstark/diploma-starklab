@@ -22,13 +22,10 @@
                     console.log("$scope.data: ", scope.data);
                     console.log("start js...", element[0]);
 
-                    var x = 10,
-                        y = 10,
-                        w = 50,
-                        h = 50;
 
-                    var vx = 2;
-                    var vy = 2;
+                    var x = 0;
+                    var y = 0;
+                    var update = 0;
 
                     // Parametre pre model so sikmym vrhom
                     var v0      = 50;    // [m/s] pociatocna rychlost v smere hodu
@@ -81,17 +78,17 @@
 
                         ctx.beginPath();
 
-                        var retX = countX();
-                        var retY = countY();
+                        // var retX = countX();
+                        // var retY = countY();
+                        //
+                        // console.log("x, y: ", retX, retY);
 
-                        console.log("x, y: ", retX, retY);
+                        // if (retY <= 0) {
+                        //     //window.clearInterval(cycle);
+                        //     $interval.cancel(timeoutId);
+                        // }
 
-                        if (retY <= 0) {
-                            //window.clearInterval(cycle);
-                            $interval.cancel(timeoutId);
-                        }
-
-                        ctx.arc(countX() + 25, countY() + 25, 5, 0, 2 * Math.PI);
+                        ctx.arc(x + 25, y + 25, 5, 0, 2 * Math.PI);
                         ctx.fill();
                         //ctx.stroke();
                     }
@@ -127,24 +124,70 @@
 
                     function updateTime() {
                         //element.text(dateFilter(new Date(), format));
-                        console.log("SCOPE DATa: ", scope.data);
+                        // console.log("SCOPE ROWS: ", scope.rows);
+                        // console.log("SCOPE ROWS X: ", scope.rows[update].x);
+                        // console.log("SCOPE ROWS Y: ", scope.rows[update].y);
+
+                        if (update == scope.fullData.length - 2) {
+                            $interval.cancel(timeoutId);
+                        }
+
+
+                        x = scope.fullData[update].x;
+                        y = scope.fullData[update].y;
+                        update += 1;
+
+                        console.log("UPDT: ", update);
+                        console.log("UPDT length: ", scope.fullData.length);
+
+                        redrawCanvas();
                     }
 
-                    scope.$watch(attrs.myCurrentTime, function(value) {
-                        format = value;
-                        updateTime();
-                    });
+                    // scope.$watch("canvasRun", function (val) {
+                    //     console.log("CANVAS CHANGE: ", val);
+                    //     if (val === true) {
+                    //         timeoutId = $interval(function() {
+                    //
+                    //
+                    //             updateTime(); // update DOM
+                    //             console.log("UPDATE");
+                    //             //redrawCanvas();
+                    //
+                    //         }, 100);
+                    //     } else if (val === false){
+                    //         $interval.cancel(timeoutId);
+                    //     }
+                    // });
+
+                    // scope.$watch(attrs.myCurrentTime, function(value) {
+                    //     format = value;
+                    //     updateTime();
+                    // });
 
                     element.on('$destroy', function() {
                         $interval.cancel(timeoutId);
                     });
 
+                    scope.startAnimation = function () {
+                        timeoutId = $interval(function() {
+
+
+                            updateTime(); // update DOM
+                            console.log("UPDATE");
+                            //redrawCanvas();
+
+                        }, 1);
+                    };
+
                     // start the UI update process; save the timeoutId for canceling
-                    timeoutId = $interval(function() {
-                        // updateTime(); // update DOM
-                        //console.log("ss", element);
-                        //redrawCanvas();
-                    }, 1000);
+                    // timeoutId = $interval(function() {
+                    //
+                    //
+                    //         updateTime(); // update DOM
+                    //         console.log("UPDATE");
+                    //         //redrawCanvas();
+                    //
+                    // }, 1000);
                 }
             };
 

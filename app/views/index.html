@@ -17,7 +17,13 @@
 <canvas id="updating-chart" width="1200" height="300"></canvas>
 
 <div ng-controller="TableCtrl">
-	<button ng-disabled="hideFullTable" ng-click="showFullDataTable()">Show full data table</button> <span ng-show="hideFullTable">(Waiting for full data)</span>
+
+	<button ng-disabled="hideFullTable" ng-click="startAnimation()">Run simulation with full data</button><span ng-show="hideFullTable">(Waiting for full data)</span>
+	<br />
+	<ui-projectile ng-model="rows"></ui-projectile>
+	<br />
+
+	<button ng-disabled="hideFullTable" ng-click="showFullDataTable()">Show full data table</button><span ng-show="hideFullTable">(Waiting for full data)</span>
 
 	<div ng-if="!fullDataTableAvailable">
 		<table>
@@ -61,7 +67,6 @@
 		</table>
 	</div>
 
-	<ui-projectile ng-model="rows"></ui-projectile>
 </div>
 
 

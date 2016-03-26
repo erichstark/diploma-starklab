@@ -15,6 +15,8 @@
 
                 if (msg.result.status === "running" && Array.isArray(msg.result.data.time)) {
 
+                    $scope.canvasRun = true;
+
                     $scope.data.push(msg.result.data);
 
                     myLiveChart.addData([msg.result.data.y[0]], msg.result.data.x[0]);
@@ -31,6 +33,10 @@
 
                 } else if (msg.result.status === "stopped") {
                     console.log("STOPPED");
+
+                    $scope.canvasRun = false;
+
+
                     for (var i = 0; i < $scope.data.length; i++) {
                         for (var j = 0; j < $scope.data[i].time.length; j++) {
                             $scope.fullData.push({
@@ -42,6 +48,10 @@
                         }
                     }
 
+
+                    // added last x data to complete chart
+                    myLiveChart.addData([0], $scope.fullData[$scope.fullData.length - 1].x);
+
                     $scope.hideFullTable = false;
                     console.log("Data full: ", $scope.fullData);
                 }
@@ -51,5 +61,6 @@
                 $scope.fullDataTableAvailable = true;
                 console.log("clicked");
             };
+            
         }]);
 })(angular);
