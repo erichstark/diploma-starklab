@@ -11,11 +11,15 @@
             return {
                 restrict: 'E',
                 template: '<canvas id="projectile" width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
+                // scope: {
+                //
+                // },
 
                 link: function(scope, element, attrs) {
                     var format,
                         timeoutId;
 
+                    console.log("$scope.data: ", scope.data);
                     console.log("start js...", element[0]);
 
                     var x = 10,
@@ -34,7 +38,7 @@
                     var cas = 0;
 
                     var canvas = document.getElementById("projectile"); // document.getElementById('projectile');
-                    console.log("element, ", canvas);
+                    //console.log("element, ", canvas);
 
                     //if (canvas.getContext) {
 
@@ -123,6 +127,7 @@
 
                     function updateTime() {
                         //element.text(dateFilter(new Date(), format));
+                        console.log("SCOPE DATa: ", scope.data);
                     }
 
                     scope.$watch(attrs.myCurrentTime, function(value) {
@@ -137,9 +142,9 @@
                     // start the UI update process; save the timeoutId for canceling
                     timeoutId = $interval(function() {
                         // updateTime(); // update DOM
-                         console.log("ss", element);
-                        redrawCanvas();
-                    }, 100);
+                        //console.log("ss", element);
+                        //redrawCanvas();
+                    }, 1000);
                 }
             };
 

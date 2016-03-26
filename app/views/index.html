@@ -17,27 +17,54 @@
 <canvas id="updating-chart" width="1200" height="300"></canvas>
 
 <div ng-controller="TableCtrl">
-	<table>
-		<thead>
-		<tr>
-			<th width="100">Data time</th>
-			<th width="100">Data x</th>
-			<th width="100">Data y</th>
-			<th width="100">Data vy</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr ng-repeat="rowContent in rows">
-			<td>{{rowContent.time}}</td>
-			<td>{{rowContent.x}}</td>
-			<td>{{rowContent.y}}</td>
-			<td>{{rowContent.vy}}</td>
-		</tr>
-		</tbody>
-	</table>
+	<button ng-disabled="hideFullTable" ng-click="showFullDataTable()">Show full data table</button> <span ng-show="hideFullTable">(Waiting for full data)</span>
+
+	<div ng-if="!fullDataTableAvailable">
+		<table>
+			<thead>
+			<tr>
+				<th width="100">Data time</th>
+				<th width="100">Data x</th>
+				<th width="100">Data y</th>
+				<th width="100">Data vy</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="rowContent in rows">
+				<td>{{rowContent.time}}</td>
+				<td>{{rowContent.x}}</td>
+				<td>{{rowContent.y}}</td>
+				<td>{{rowContent.vy}}</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div ng-if="fullDataTableAvailable">
+		<table>
+			<thead>
+			<tr>
+				<th width="100">Data time</th>
+				<th width="100">Data x</th>
+				<th width="100">Data y</th>
+				<th width="100">Data vy</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="rowContent in fullData">
+				<td>{{rowContent.time}}</td>
+				<td>{{rowContent.x}}</td>
+				<td>{{rowContent.y}}</td>
+				<td>{{rowContent.vy}}</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<ui-projectile ng-model="rows"></ui-projectile>
 </div>
 
-<ui-projectile></ui-projectile>
+
 
 
 <script>
