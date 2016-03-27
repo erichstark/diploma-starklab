@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var fs = require("fs");
+var shell = require('shelljs');
 
 var server = app.listen(3000);
 var io = require('socket.io').listen(server);
@@ -16,11 +17,32 @@ app.get('/', function(req, res){
 
 app.get('/listUsers', function (req, res) {
     fs.readFile(__dirname + "/" + "users.json", 'utf8', function (err, data) {
-        console.log(data);
+        //console.log(data);
         res.end(data);
     });
 
-    console.log("GET Access from outside...");
+
+
+    //console.log("GET Access from outside...", version);
+});
+
+app.get('/matlab', function(req, res){
+    res.sendFile(__dirname + '/app/views/matlab.html');
+});
+
+app.post('/runMatlab', function(req, res){
+    console.log(req.body);
+
+    shell.exec('\"\/Applications\/MATLAB_R2015b.app\/bin\/matlab\" -nosplash -nodesktop -noFigureWindows -r \"run(\'\/Users\/Erich\/Desktop\/DP\/Matlab\/diploma-matlab\/loop\');exit;\"',
+        function(code, stdout, stderr) {
+            console.log('Exit code:', code);
+            console.log('Program output:', stdout);
+            console.log('Program stderr:', stderr);
+        });
+
+
+    res.redirect('/');
+    //res.sendStatus(200);
 });
 
 app.post('/test', function (req, res) {
