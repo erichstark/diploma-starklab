@@ -15,6 +15,14 @@ HTML,CS:
 Charts:
 Horizontal projection
 - draw speed vy with y in the same graph
+- casovy priebeh vysky, x
+- realne hodnoty na x-ovej osi
+
+Canvas:
+- priebezne vykreslenie aj ked budu skoky
 
 Licence:
 - add GPL to files
+
+MongoDB:
+- write results to database
