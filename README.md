@@ -12,6 +12,9 @@ Socket.io:
 HTML,CS:
 - option to set sampling of data, every 10, 20, etc...
 
+JS:
+- minification for release (gulp?)
+
 Charts:
 Horizontal projection
 - draw speed vy with y in the same graph

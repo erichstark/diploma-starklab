@@ -11,16 +11,11 @@
             return {
                 restrict: 'E',
                 template: '<canvas id="projectile" width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
-                // scope: {
-                //
-                // },
 
                 link: function(scope, element, attrs) {
+                    console.log("Start directive uiProjectile");
                     var format,
                         timeoutId;
-
-                    console.log("$scope.data: ", scope.data);
-                    console.log("start js...", element[0]);
 
 
                     var x = 0;
@@ -46,18 +41,10 @@
                     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
                     ctx.transform(1, 0, 0, -1, 0, canvas.height);
 
-
-
                     redrawCanvas();
-                    //}
-
-                    ctx.beginPath();
-                    ctx.arc(600, 0, 5, 0, 2 * Math.PI);
-                    ctx.fill();
 
 
-
-
+                    // asi by bolo lepsie presunut funkcie do controlleru pre tuto directivu
                     function drawAxis() {
                         // draw x line
                         ctx.beginPath();
@@ -103,6 +90,19 @@
                         cas += 0.05;
 
                     }
+                    
+                    scope.redrawCanvas = function(a, b) {
+                        x = a;
+                        y = b;
+                        
+                        console.log("redrawCanvas: ", x, y);
+                        
+                        ctx.clearRect(0,0,600,300);
+                        drawAxis(ctx);
+                        drawBall(ctx);
+
+                        cas += 0.05;
+                    };
 
 
                     // counters
@@ -116,29 +116,31 @@
                         //return x * Math.tan(alfa_rad) - g * x^2
                     }
 
-
-
-
-
-                    //var cycle = setInterval(redrawCanvas, 100);
-
                     function updateTime() {
                         //element.text(dateFilter(new Date(), format));
                         // console.log("SCOPE ROWS: ", scope.rows);
                         // console.log("SCOPE ROWS X: ", scope.rows[update].x);
                         // console.log("SCOPE ROWS Y: ", scope.rows[update].y);
 
-                        if (update == scope.fullData.length - 2) {
-                            $interval.cancel(timeoutId);
+                        // if (update == scope.fullData.length - 2) {
+                        //     $interval.cancel(timeoutId);
+                        // }
+                        
+                       
+
+                        //x = scope.fullData[update].x;
+                        //y = scope.fullData[update].y;
+                        //x = scope.cnvsX;
+                        //y = scope.cnvsY;
+                        
+                        if (y <= 0) {
+                            //$interval.cancel(timeoutId);
                         }
+                        
+                        //update += 1;
 
-
-                        x = scope.fullData[update].x;
-                        y = scope.fullData[update].y;
-                        update += 1;
-
-                        console.log("UPDT: ", update);
-                        console.log("UPDT length: ", scope.fullData.length);
+                        //console.log("UPDT: ", update);
+                        //console.log("UPDT length: ", scope.fullData.length);
 
                         redrawCanvas();
                     }

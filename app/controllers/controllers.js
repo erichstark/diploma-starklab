@@ -28,6 +28,11 @@
                         y: msg.result.data.y[0],
                         vy: msg.result.data.vy[0]
                     });
+                    
+                    //$scope.cnvsX = msg.result.data.x[0];
+                    //$scope.cnvsY = msg.result.data.y[0];
+                    
+                    $scope.redrawCanvas(msg.result.data.x[0], msg.result.data.y[0]);
 
                     //console.log("DATA ALL: ", $scope.data);
 
