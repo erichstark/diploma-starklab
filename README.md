@@ -1,7 +1,11 @@
-# starklab
+# StarkLab
 Diploma thesis: Virtual laboratory using JavaScript on the server side
 
-TODO:
+## Manual
+### Run MongoDB
+- /Users/Erich/DevTools/mongodb-3.2.4/bin/mongod --dbpath=/Users/Erich/Desktop/DP/MongoDB/data --port 27017
+
+# TODO
 
 Structure:
 - change imports from cdn to npm
