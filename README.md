@@ -19,6 +19,9 @@ HTML,CS:
 JS:
 - minification for release (gulp?)
 
+ExpressJs:
+- create session after ldap login.
+
 Charts:
 Horizontal projection
 - draw speed vy with y in the same graph
