@@ -20,7 +20,7 @@
             var loggedUser = $cookies.get('username');
             console.log("cookies: ", loggedUser);
 
-            socketio.on('message', function (msg) {
+            socketio.on('message:' + loggedUser, function (msg) {
                 console.log("ANGULAR SOCKET: ", msg);
 
                 if (msg.result.status === "running" && Array.isArray(msg.result.data.time)) {
@@ -61,7 +61,13 @@
                         for (var j = 0; j < $scope.data[i].time.length; j++) {
                             time.push($scope.data[i].time[j]);
                             x.push($scope.data[i].x[j]);
+
+                            // matlab process last value as null in y data
+                            if ($scope.data[i].y[j] == null) {
+                                $scope.data[i].y[j] = 0;
+                            }
                             y.push($scope.data[i].y[j]);
+
                             vy.push($scope.data[i].vy[j]);
 
                             $scope.fullData.push({
@@ -105,7 +111,7 @@
                 console.log("insertAllData started...");
                 
                 // then function if sends correctly
-                $http.post('/mongo/insert/all', obj);
+                $http.post('/mongo/insert/one', obj);
             }
             
         }]);
