@@ -9,6 +9,7 @@ Diploma thesis: Virtual laboratory using JavaScript on the server side
 
 Structure:
 - change imports from cdn to npm
+- modular app
 
 Socket.io:
 - socket.io auth
@@ -18,6 +19,7 @@ HTML,CS:
 
 JS:
 - minification for release (gulp?)
+- what is strict mode?
 
 ExpressJs:
 - create session after ldap login.
