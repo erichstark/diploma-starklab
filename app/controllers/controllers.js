@@ -1,7 +1,7 @@
 (function (angular) {
     "use strict";
     angular.module("starkLab.controllers", [])
-        .controller('TableCtrl', ['$scope', 'socketio', function ($scope, socketio) {
+        .controller('TableCtrl', ['$scope', '$http', '$cookies', 'socketio', 'ProjectileDataObject', function ($scope, $http, $cookies, socketio, ProjectileDataObject) {
             $scope.hideFullTable = true;
 
             $scope.rows = [];
@@ -9,6 +9,16 @@
             $scope.data = [];
 
             $scope.fullData = [];
+
+
+
+
+            //insertAllData();
+
+
+
+            var loggedUser = $cookies.get('username');
+            console.log("cookies: ", loggedUser);
 
             socketio.on('message', function (msg) {
                 console.log("ANGULAR SOCKET: ", msg);
@@ -41,9 +51,19 @@
 
                     $scope.canvasRun = false;
 
+                    var time = [],
+                        x = [],
+                        y = [],
+                        vy = [];
+
 
                     for (var i = 0; i < $scope.data.length; i++) {
                         for (var j = 0; j < $scope.data[i].time.length; j++) {
+                            time.push($scope.data[i].time[j]);
+                            x.push($scope.data[i].x[j]);
+                            y.push($scope.data[i].y[j]);
+                            vy.push($scope.data[i].vy[j]);
+
                             $scope.fullData.push({
                                 time: $scope.data[i].time[j],
                                 x: $scope.data[i].x[j],
@@ -53,6 +73,20 @@
                         }
                     }
 
+                    // var obj = {
+                    //     user: loggedUser,
+                    //     experiment: 'projectile',
+                    //     executed: new Date(),
+                    //     time: time,
+                    //     x: x,
+                    //     y: y,
+                    //     vy: vy
+                    // };
+
+                    var obj = new ProjectileDataObject(loggedUser, time, x, y, vy);
+
+                    insertDataToDatabase(obj);
+                    // need cleanup after insert
 
                     // added last x data to complete chart
                     myLiveChart.addData([0], $scope.fullData[$scope.fullData.length - 1].x);
@@ -66,6 +100,13 @@
                 $scope.fullDataTableAvailable = true;
                 console.log("clicked");
             };
+
+            function insertDataToDatabase(obj) {
+                console.log("insertAllData started...");
+                
+                // then function if sends correctly
+                $http.post('/mongo/insert/all', obj);
+            }
             
         }]);
 })(angular);

@@ -7,7 +7,8 @@
             'starkLab.controllers',
             'starkLab.directives',
             'starkLab.services',
-            'starkLab.filters'
+            'starkLab.filters',
+            'ngCookies'
         ]);
 
 

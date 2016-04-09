@@ -18,7 +18,7 @@ var ldap = require('ldapjs');
 var session = require('express-session');
 
 // max age v sec * 1000
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 120000 }}));
+app.use(session({ key: 'userID', secret: 'keyboard cat', cookie: { maxAge: 120000 }}));
 
 var url = 'mongodb://localhost:27017/test';
 // MongoClient.connect(url, function(err, db) {
@@ -142,7 +142,9 @@ app.post('/login', function (req, res) {
                 else {
                     // client unbind? mozno uz mi netreba connection
                     console.log("Login successful!");
+
                     req.session.user = req.body.username;
+                    res.cookie('username', req.body.username);
                     res.redirect('/dashboard');
                 }
             });
@@ -157,8 +159,15 @@ app.post('/login', function (req, res) {
     }
 });
 
+app.post('/logout', function(req, res){
+    // delete session
+
+    res.redirect('/');
+});
+
 app.get('/dashboard', function (req, res) {
     if (req.session && req.session.user) {
+        console.log("User: ", req.session.user);
         res.sendFile(__dirname + '/app/views/index.html');
     } else {
         res.redirect('/');
@@ -184,12 +193,13 @@ app.post('/test', function (req, res) {
     res.sendStatus(200);
 });
 
-app.get('/mongo/insert', function(req, res){
+app.post('/mongo/insert/one', function(req, res){
+    console.log("mongo insert one");
     res.sendStatus(200);
 });
 
-app.post('/mongo/insert/many', function(req, res){
-
+app.post('/mongo/insert/all', function(req, res){
+    console.log("mongo insert all", req.body);
     res.sendStatus(200);
 });
 
