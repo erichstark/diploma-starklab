@@ -11,11 +11,21 @@
             return {
                 restrict: 'E',
                 template: '<canvas id="projectile" width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
+                // scope: {
+                //     ngModel: '@'
+                // },
 
-                link: function(scope, element, attrs) {
+                link: function(scope, element, attrs, ngModelCtrl) {
                     console.log("Start directive uiProjectile");
                     var format,
                         timeoutId;
+
+                    console.log("Projectile canvas scope: ", scope.$parent, scope);
+                    
+                    // there is no ng-model in directive so data are pushed real-time
+                    var inputData = scope.detailResult;
+
+                    //if (scope.$parent.detailResult)
 
 
                     var x = 0;
@@ -83,6 +93,18 @@
 
                     function redrawCanvas() {
 
+                        //console.log("reDraw:", inputData);
+
+                        if (inputData === "undefined" && update < inputData.x.length) {
+                            console.log("x:", x);
+                            x = inputData.x[update];
+                            y = inputData.y[update];
+                            update++;
+                        } else {
+                            console.log("else");
+                            $interval.cancel(timeoutId);
+                        }
+
                         ctx.clearRect(0,0,600,300);
                         drawAxis(ctx);
                         drawBall(ctx);
@@ -95,7 +117,7 @@
                         x = a;
                         y = b;
                         
-                        console.log("redrawCanvas: ", x, y);
+                        //console.log("redrawCanvas: ", x, y);
                         
                         ctx.clearRect(0,0,600,300);
                         drawAxis(ctx);
@@ -133,9 +155,10 @@
                         //x = scope.cnvsX;
                         //y = scope.cnvsY;
                         
-                        if (y <= 0) {
-                            //$interval.cancel(timeoutId);
-                        }
+                        // if (y <= 0) {
+                        //     //$interval.cancel(timeoutId);
+                        // }
+                        console.log("update time");
                         
                         //update += 1;
 
@@ -171,14 +194,15 @@
                     });
 
                     scope.startAnimation = function () {
+                        console.log("run animation");
                         timeoutId = $interval(function() {
 
 
-                            updateTime(); // update DOM
+                            //updateTime(); // update DOM
                             console.log("UPDATE");
-                            //redrawCanvas();
+                            redrawCanvas();
 
-                        }, 1);
+                        }, 0.1);
                     };
 
                     // start the UI update process; save the timeoutId for canceling
