@@ -18,7 +18,7 @@ var ldap = require('ldapjs');
 var session = require('express-session');
 
 // max age v sec * 1000
-app.use(session({key: 'userID', secret: 'keyboard cat', cookie: {maxAge: 120000}}));
+app.use(session({key: 'userID', secret: 'keyboard cat', cookie: {maxAge: 1200000}}));
 
 var url = 'mongodb://localhost:27017/test';
 // MongoClient.connect(url, function(err, db) {
@@ -51,15 +51,28 @@ var insertDocument = function (db, obj, res) {
     // });
 };
 
-var findRestaurants = function (db, callback) {
-    var cursor = db.collection('restaurants').find({"borough": "Hlohovec"});
-    cursor.each(function (err, doc) {
-        assert.equal(err, null);
-        if (doc != null) {
-            console.dir(doc);
-        } else {
-            callback();
+var findSimulation = function (db, sim, callback) {
+
+    var query = {};
+
+    var user = sim.user;
+    var simType = sim.experiment;
+    var simulationId = sim.id;
+
+    if (simulationId) {
+        query = {
+            "_id": ObjectId(simulationId),
+            "user": user
         }
+    } else {
+        query = {
+            "user": user
+        }
+    }
+
+
+    var cursor = db.collection("projectile").find( query ).toArray(function(err, results){
+        callback(results);
     });
 };
 
@@ -94,6 +107,10 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/app/views/login.html');
 });
 
+app.get('/results', function (req, res) {
+    res.sendFile(__dirname + '/app/views/results.html');
+});
+
 var sess;
 
 app.post('/login', function (req, res) {
@@ -109,6 +126,7 @@ app.post('/login', function (req, res) {
         var rdn = "uid=" + req.body.username + ", ou=People, DC=stuba, DC=sk";
         var password = req.body.password;
 
+        // TODO: dont delete code for production!!!!
         client.bind(rdn, password, function (err) {
 
             // If there is an error, tell the user about it. Normally we would
@@ -135,6 +153,14 @@ app.post('/login', function (req, res) {
                 res.redirect('/matlab');
             }
         });
+
+        // TODO: delete after test - use without internet
+        // console.log("Login successful!");
+        //
+        // req.session.user = req.body.username;
+        // res.cookie('username', req.body.username);
+        // res.redirect('/matlab');
+
 
 
     } else {
@@ -194,11 +220,10 @@ app.post('/mongo/insert/one', function (req, res) {
     console.log("mongo insert one");
 
     MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        console.log("Connected correctly to server.");
-        // db.close();
-
-        insertDocument(db, req.body, res);
+        if (err === null) {
+            console.log("Connected correctly to server.");
+            insertDocument(db, req.body, res);
+        }
     });
 });
 
@@ -208,7 +233,99 @@ app.post('/mongo/insert/one', function (req, res) {
 //     res.sendStatus(200);
 // });
 
-app.get('/mongo/report/:id', function (req, res) {
+// app.param("id", function (req, res, next, value) {
+//     console.log("called param id", value);
+//     next();
+// });
 
-    res.sendStatus(200);
+app.get('/mongo/simulation/:id', function (req, res) {
+    console.log("simulation one", req.params.id);
+
+    //if (typeof req.params.id === "number") {
+        MongoClient.connect(url, function(err, db) {
+            if (err) {
+                console.log(err);
+                return res(err);
+            } else {
+                console.log("Connected correctly to server.");
+                //findSimulation(db, simulation, data);
+
+                var simulation = {
+                    user: 'xstark',
+                    type: 'projectile'
+                };
+
+                // findSimulation(db, simulation, function(err, data){
+                //     if (err) {
+                //         console.log(err);
+                //         res(err);
+                //     } else {
+                //         console.log(data);
+                //         res.json(data);
+                //         res.sendStatus(200);
+                //     }
+                // });
+
+                findSimulation(db, simulation, function(para) {
+                    console.log(":para", para);
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(para));
+                    db.close();
+                });
+
+            }
+        });
+
+
+        //res.sendStatus(200);
+    // } else {
+    //     // bad request
+    // }
+
+});
+
+app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
+    console.log("all simulations for user");
+    console.log("params user: ", req.params.user);
+    console.log("params experiment: ", req.params.simulation);
+    console.log("params ID: ", req.params.id);
+
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            console.log(err);
+            //return res(err);
+            res.send(err);
+        } else {
+            console.log("Connected correctly to server.");
+            //findSimulation(db, simulation, data);
+
+            var checkedId = undefined;
+
+            if (req.params.id && req.params.id.length === 24) {
+                checkedId = req.params.id;
+
+
+                // shoud be send bad param
+            }
+
+            var simulationParams = {
+                user: req.params.user,
+                experiment: req.params.simulation,
+                id: checkedId
+            };
+
+            // var simulationParams = {
+            //     user: {},
+            //     experiment: {}
+            // };
+
+            findSimulation(db, simulationParams, function(results) {
+                //console.log(":para", results);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(results));
+                db.close();
+            });
+
+        }
+    });
 });
