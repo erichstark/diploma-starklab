@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My results</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-cookies.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.1/Chart.js"></script>
+
+	<script src="../app.js"></script>
+	<script src="../services/services.js"></script>
+	<script src="../controllers/controllers.js"></script>
+	<script src="../filters/filters.js"></script>
+	<script src="../directives/directives.js"></script>
+</head>
+<body ng-app="starkLab" ng-controller="ResultsCtrl">
+
+<h2>My all simulations.</h2>
+<table >
+	<thead>
+	<tr>
+		<th width="100">User name</th>
+		<th width="120">Date</th>
+		<th width="100">Simulation</th>
+		<th width="100">More info</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="result in results track by $index">
+		<td>{{result.user}}</td>
+		<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
+		<td>{{result.experiment}}</td>
+		<td><button ng-click="showDetails(result)">Select</button></td>
+	</tr>
+	</tbody>
+</table>
+
+<div ng-show="dashboardAvailable">
+	<button ng-click="startGraph()">Run graph animation with full data</button><!--<input type="number" ng-model="sampling" placeholder="sampling">-->
+	<label for="repeatSelect"> Repeat select: </label>
+	<select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
+		<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+	</select>
+	<canvas id="updating-chart" width="1200" height="300"></canvas>
+
+
+		<button ng-click="startAnimation2()">Run canvas animation with full data</button></span>
+		<br />
+
+		<div ng-show="dashboardAvailable">
+			<ui-projectile ng-model="results"></ui-projectile>
+		</div>
+		<br />
+
+		<!-- create reusable directive -->
+		<h3>Full data table</h3>
+		<div>
+			<table>
+				<thead>
+				<tr>
+					<th width="100">Data time</th>
+					<th width="100">Data x</th>
+					<th width="100">Data y</th>
+					<th width="100">Data vy</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="result in detailData">
+					<td>{{result.time}}</td>
+					<td>{{result.x}}</td>
+					<td>{{result.y}}</td>
+					<td>{{result.vy}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+
+</div>
+
+<script>
+	var canvas = document.getElementById('updating-chart'),
+			ctx = canvas.getContext('2d'),
+			startingData = {
+				labels: [1],
+				datasets: [
+					{
+						fillColor: "rgba(220,220,220,0.2)",
+						strokeColor: "rgba(220,220,220,1)",
+						pointColor: "rgba(220,220,220,1)",
+						pointStrokeColor: "#fff",
+						data: {}
+					}
+					,
+					{
+						fillColor: "rgba(151,187,205,0.2)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						data: {}
+					}
+				]
+			},
+			latestLabel = startingData.labels[0];
+
+	// Reduce the animation steps for demo clarity.
+	var myLiveChart = new Chart(ctx).Line(startingData, {
+		responsive: true,
+		animationEasing: 'easeOutBounce',
+		animationSteps: 15,
+		scaleGridLineColor: 'lightgray',
+		maintainAspectRatio: true,
+	});
+
+</script>
+
+</body>
+</html>
