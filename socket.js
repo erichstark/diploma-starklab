@@ -21,19 +21,6 @@ var session = require('express-session');
 app.use(session({key: 'userID', secret: 'keyboard cat', cookie: {maxAge: 1200000}}));
 
 var url = 'mongodb://localhost:27017/test';
-// MongoClient.connect(url, function(err, db) {
-//     assert.equal(null, err);
-//     // console.log("Connected correctly to server.");
-//     // db.close();
-//
-//     // insertDocument(db, function() {
-//     //     db.close();
-//     // });
-//
-//     findRestaurants(db, function () {
-//         db.close();
-//     });
-// });
 
 var insertDocument = function (db, obj, res) {
     db.collection('projectile').insertOne(obj).then(function(r) {
@@ -42,13 +29,6 @@ var insertDocument = function (db, obj, res) {
         db.close();
         res.sendStatus(200);
     });
-    //
-    // var col = db.collection('insert_one_with_promise');
-    // col.insertOne({a:1}).then(function(r) {
-    //     test.equal(1, r.insertedCount);
-    //     // Finish up test
-    //     db.close();
-    // });
 };
 
 var findSimulation = function (db, sim, callback) {
@@ -84,23 +64,6 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
-
-// Access the session as req.session
-app.get('/vvv', function (req, res, next) {
-    var sess = req.session;
-    if (sess.views) {
-        sess.views++;
-        res.setHeader('Content-Type', 'text/html');
-        res.write('<p>views: ' + sess.views + '</p>');
-        res.write('<p>expires in: ' + (sess.cookie.maxAge / 1000) + 's</p>');
-        res.end();
-    } else {
-        sess.views = 1;
-        res.end('welcome to the session demo. refresh!')
-    }
-});
-
-
 app.use("/", express.static(__dirname + '/app/'));
 
 app.get('/', function (req, res) {
@@ -114,10 +77,6 @@ app.get('/results', function (req, res) {
 var sess;
 
 app.post('/login', function (req, res) {
-    // if (req.session && req.session.user) {
-    //     // user logged
-    //     res.redirect('/dashboard');
-    // } else {
     if (req.body.username && req.body.password) {
         var client = ldap.createClient({
             url: 'ldap://ldap.stuba.sk'
@@ -154,22 +113,9 @@ app.post('/login', function (req, res) {
             }
         });
 
-        // TODO: delete after test - use without internet
-        // console.log("Login successful!");
-        //
-        // req.session.user = req.body.username;
-        // res.cookie('username', req.body.username);
-        // res.redirect('/matlab');
-
-
-
     } else {
         res.redirect('/');
     }
-    // console.log("req body: ", req.body.username, req.body.password);
-    // console.log("req session: ", req.session);
-    // res.redirect('/dashboard');
-    //}
 });
 
 app.post('/logout', function (req, res) {
@@ -227,21 +173,8 @@ app.post('/mongo/insert/one', function (req, res) {
     });
 });
 
-
-// app.post('/mongo/insert/all', function (req, res) {
-//     console.log("mongo insert all", req.body);
-//     res.sendStatus(200);
-// });
-
-// app.param("id", function (req, res, next, value) {
-//     console.log("called param id", value);
-//     next();
-// });
-
 app.get('/mongo/simulation/:id', function (req, res) {
     console.log("simulation one", req.params.id);
-
-    //if (typeof req.params.id === "number") {
         MongoClient.connect(url, function(err, db) {
             if (err) {
                 console.log(err);
@@ -255,17 +188,6 @@ app.get('/mongo/simulation/:id', function (req, res) {
                     type: 'projectile'
                 };
 
-                // findSimulation(db, simulation, function(err, data){
-                //     if (err) {
-                //         console.log(err);
-                //         res(err);
-                //     } else {
-                //         console.log(data);
-                //         res.json(data);
-                //         res.sendStatus(200);
-                //     }
-                // });
-
                 findSimulation(db, simulation, function(para) {
                     console.log(":para", para);
                     res.setHeader('Content-Type', 'application/json');
@@ -275,13 +197,6 @@ app.get('/mongo/simulation/:id', function (req, res) {
 
             }
         });
-
-
-        //res.sendStatus(200);
-    // } else {
-    //     // bad request
-    // }
-
 });
 
 app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
@@ -314,13 +229,7 @@ app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
                 id: checkedId
             };
 
-            // var simulationParams = {
-            //     user: {},
-            //     experiment: {}
-            // };
-
             findSimulation(db, simulationParams, function(results) {
-                //console.log(":para", results);
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify(results));
                 db.close();

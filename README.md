@@ -24,6 +24,11 @@ JS:
 
 ExpressJs:
 - create session after ldap login.
+- add mock for login if you are outside STUBA network
+- v matlabe sa da specifikovat
+Username: ''
+Password: ''
+keby dopredu poslem ako parameter aj heslo pre usera, tak by to slo overovat na strane expressu.
 
 Charts:
 Horizontal projection
@@ -39,3 +44,6 @@ Licence:
 
 MongoDB:
 - write results to database
+
+Dokument:
+- vymenit "Algoritmus" za obrazok tam kde sa to hodi.
