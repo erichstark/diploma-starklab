@@ -1,30 +1,21 @@
-"use strict";
-
 var express = require('express');
 var app = express();
-var fs = require("fs");
 var shell = require('shelljs');
-
 var ObjectId = require('mongodb').ObjectID;
 var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-
 var server = app.listen(3000);
 var io = require('socket.io').listen(server);
-
-
 var ldap = require('ldapjs');
-
 var session = require('express-session');
 
-// max age v sec * 1000
+// max age v sec * 1000, nastavit unlimited, delete az po logout
 app.use(session({key: 'userID', secret: 'keyboard cat', cookie: {maxAge: 1200000}}));
 
 var url = 'mongodb://localhost:27017/test';
 
 var insertDocument = function (db, obj, res) {
-    db.collection('projectile').insertOne(obj).then(function(r) {
-        test.equal(1, r.insertedCount);
+    db.collection('projectile').insertOne(obj).then(function (r) {
+        // test.equal(1, r.insertedCount);
         // Finish up test
         db.close();
         res.sendStatus(200);
@@ -32,13 +23,10 @@ var insertDocument = function (db, obj, res) {
 };
 
 var findSimulation = function (db, sim, callback) {
-
     var query = {};
-
     var user = sim.user;
     var simType = sim.experiment;
     var simulationId = sim.id;
-
     if (simulationId) {
         query = {
             "_id": ObjectId(simulationId),
@@ -49,19 +37,17 @@ var findSimulation = function (db, sim, callback) {
             "user": user
         }
     }
-
-
-    var cursor = db.collection("projectile").find( query ).toArray(function(err, results){
+    var cursor = db.collection("projectile").find(query).toArray(function (err, results) {
         callback(results);
     });
 };
 
 
 var bodyParser = require('body-parser');
-// app.use(bodyParser.json()); // support json encoded bodies
-// app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 // increased limit because of Error: request entity too large
+// support json encoded bodies
 app.use(bodyParser.json({limit: '2mb'}));
+// support encoded bodies
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
 app.use("/", express.static(__dirname + '/app/'));
@@ -73,8 +59,6 @@ app.get('/', function (req, res) {
 app.get('/results', function (req, res) {
     res.sendFile(__dirname + '/app/views/results.html');
 });
-
-var sess;
 
 app.post('/login', function (req, res) {
     if (req.body.username && req.body.password) {
@@ -149,9 +133,8 @@ app.get('/matlab', function (req, res) {
 app.post('/matlab/run', function (req, res) {
     var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd \/Users\/Erich\/Desktop\/DP\/Matlab\/diploma-matlab\/;Sikmy_vrh_par(' + req.body.v0 + ',' + req.body.alfa_deg + ',\'' + req.session.user + '\');projectile_sim;exit;\"';
 
-    shell.exec(cmd,
-        function (code, stdout, stderr) {
-        });
+    shell.exec(cmd, function (code, stdout, stderr) {
+    });
 
     res.redirect('/dashboard');
 });
@@ -165,7 +148,7 @@ app.post('/matlab/result', function (req, res) {
 app.post('/mongo/insert/one', function (req, res) {
     console.log("mongo insert one");
 
-    MongoClient.connect(url, function(err, db) {
+    MongoClient.connect(url, function (err, db) {
         if (err === null) {
             console.log("Connected correctly to server.");
             insertDocument(db, req.body, res);
@@ -175,51 +158,41 @@ app.post('/mongo/insert/one', function (req, res) {
 
 app.get('/mongo/simulation/:id', function (req, res) {
     console.log("simulation one", req.params.id);
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-                console.log(err);
-                return res(err);
-            } else {
-                console.log("Connected correctly to server.");
-                //findSimulation(db, simulation, data);
-
-                var simulation = {
-                    user: 'xstark',
-                    type: 'projectile'
-                };
-
-                findSimulation(db, simulation, function(para) {
-                    console.log(":para", para);
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(para));
-                    db.close();
-                });
-
-            }
-        });
-});
-
-app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
-    console.log("all simulations for user");
-    console.log("params user: ", req.params.user);
-    console.log("params experiment: ", req.params.simulation);
-    console.log("params ID: ", req.params.id);
-
-    MongoClient.connect(url, function(err, db) {
+    MongoClient.connect(url, function (err, db) {
         if (err) {
             console.log(err);
-            //return res(err);
-            res.send(err);
+            return res(err);
         } else {
             console.log("Connected correctly to server.");
             //findSimulation(db, simulation, data);
 
+            var simulation = {
+                user: 'xstark',
+                type: 'projectile'
+            };
+
+            findSimulation(db, simulation, function (para) {
+                console.log(":para", para);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(para));
+                db.close();
+            });
+
+        }
+    });
+});
+
+app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
+    MongoClient.connect(url, function (err, db) {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            console.log("Connected correctly to server.");
             var checkedId = undefined;
 
             if (req.params.id && req.params.id.length === 24) {
                 checkedId = req.params.id;
-
-
                 // shoud be send bad param
             }
 
@@ -229,12 +202,11 @@ app.get('/mongo/:user/:simulation?/:id?', function (req, res) {
                 id: checkedId
             };
 
-            findSimulation(db, simulationParams, function(results) {
+            findSimulation(db, simulationParams, function (results) {
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify(results));
                 db.close();
             });
-
         }
     });
 });
