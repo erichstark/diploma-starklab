@@ -51,6 +51,7 @@ app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
 app.use("/", express.static(__dirname + '/app/'));
+app.use("/node_modules/", express.static(__dirname + '/node_modules/'));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/app/views/login.html');
