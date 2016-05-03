@@ -248,33 +248,33 @@
 
 				</div>
 
-				<!--<script>-->
-					<!--var canvasResults = document.getElementById('results-chart'),-->
-							<!--ctxResults = canvasResults.getContext('2d'),-->
-							<!--startingDataResults = {-->
-								<!--labels: [1],-->
-								<!--datasets: [-->
-									<!--{-->
-										<!--fillColor: "rgba(220,220,220,0.2)",-->
-										<!--strokeColor: "rgba(220,220,220,1)",-->
-										<!--pointColor: "rgba(220,220,220,1)",-->
-										<!--pointStrokeColor: "#fff",-->
-										<!--data: {}-->
-									<!--}-->
-								<!--]-->
-							<!--},-->
-							<!--latestLabelResults = startingDataResults.labels[0];-->
+				<script>
+					var canvasResults = document.getElementById('results-chart'),
+							ctxResults = canvasResults.getContext('2d'),
+							startingDataResults = {
+								labels: [1],
+								datasets: [
+									{
+										fillColor: "rgba(220,220,220,0.2)",
+										strokeColor: "rgba(220,220,220,1)",
+										pointColor: "rgba(220,220,220,1)",
+										pointStrokeColor: "#fff",
+										data: {}
+									}
+								]
+							},
+							latestLabelResults = startingDataResults.labels[0];
 
-					<!--// Reduce the animation steps for demo clarity.-->
-					<!--var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {-->
-						<!--responsive: true,-->
-						<!--animationEasing: 'easeOutBounce',-->
-						<!--animationSteps: 15,-->
-						<!--scaleGridLineColor: 'lightgray',-->
-						<!--maintainAspectRatio: true-->
-					<!--});-->
+					// Reduce the animation steps for demo clarity.
+					var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
+						responsive: true,
+						animationEasing: 'easeOutBounce',
+						animationSteps: 15,
+						scaleGridLineColor: 'lightgray',
+						maintainAspectRatio: true
+					});
 
-				<!--</script>-->
+				</script>
 
 				</div>
 			</div>

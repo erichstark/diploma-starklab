@@ -186,7 +186,7 @@
                     //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
                         //console.log("run canvas int inside", $scope.detailResult.y[update]);
-                        myLiveChart.addData([$scope.detailResult.y[update]], $scope.detailResult.x[update]);
+                        myResultsChart.addData([$scope.detailResult.y[update]], $scope.detailResult.x[update]);
 
                         update = update + sampling;
                     } else {
