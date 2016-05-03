@@ -10,7 +10,7 @@
         .directive('uiProjectile', ['$interval', 'dateFilter', function ($interval, dateFilter) {
             return {
                 restrict: 'E',
-                template: '<canvas id="projectile" width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
+                template: '<canvas width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
                 // scope: {
                 //     ngModel: '@'
                 // },
@@ -39,8 +39,11 @@
                     var alfa_rad = alfa_deg*2* Math.PI/360;   //% [rad] uhol vrhu v radianoch
                     var cas = 0;
 
-                    var canvas = document.getElementById("projectile"); // document.getElementById('projectile');
-                    //console.log("element, ", canvas);
+                    //var canvas = document.getElementById("projectile"); // document.getElementById('projectile');
+                    var canvas = element.find('canvas')[0];
+                    console.log("get element ", canvas);
+                    console.log("angular element ", element.find('canvas')[0]);
+
 
                     //if (canvas.getContext) {
 

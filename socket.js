@@ -52,6 +52,7 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
 app.use("/", express.static(__dirname + '/app/'));
 app.use("/node_modules/", express.static(__dirname + '/node_modules/'));
+app.use("/assets/", express.static(__dirname + '/assets/'));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/app/views/login.html');
@@ -59,6 +60,10 @@ app.get('/', function (req, res) {
 
 app.get('/results', function (req, res) {
     res.sendFile(__dirname + '/app/views/results.html');
+});
+
+app.get('/dash', function (req, res) {
+    res.sendFile(__dirname + '/app/views/dashboard.html');
 });
 
 app.post('/login', function (req, res) {
@@ -132,12 +137,19 @@ app.get('/matlab', function (req, res) {
 });
 
 app.post('/matlab/run', function (req, res) {
+    console.log("matlab v0: ", req.body.v0);
+    console.log("matlab alfa_deg: ", req.body.alfa_deg);
+    console.log("matlab sesstion: ", req.session.user);
+
     var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd \/Users\/Erich\/Desktop\/DP\/Matlab\/diploma-matlab\/;Sikmy_vrh_par(' + req.body.v0 + ',' + req.body.alfa_deg + ',\'' + req.session.user + '\');projectile_sim;exit;\"';
 
     shell.exec(cmd, function (code, stdout, stderr) {
+        console.log("exec now");
     });
 
-    res.redirect('/dashboard');
+    // nerobit tu ale na frontende
+    //res.redirect('/dashboard');
+    res.sendStatus(200);
 });
 
 app.post('/matlab/result', function (req, res) {

@@ -20,6 +20,7 @@
             var update = 0;
 
             var loggedUser = $cookies.get('username');
+
             console.log("cookies: ", loggedUser);
 
             socketio.on('message:' + loggedUser, function (msg) {
@@ -28,7 +29,7 @@
                 if (msg.result.status === "running" && !angular.isArray(msg.result.data.time)) {
                     console.log("first data");
 
-                    timeoutId = $interval(function() {
+                    timeoutId = $interval(function () {
                         console.log("concatedXData: ", update, concatedXData, concatedXData.length);
 
                         // run animation when some data is available
@@ -90,7 +91,7 @@
                 // then function if sends correctly
                 $http.post('/mongo/insert/one', obj);
             }
-            
+
         }])
         .controller("ResultsCtrl", ["$scope", "$http", "$cookies", "$interval", function ($scope, $http, $cookies, $interval) {
             console.log("ResultsCtrl started...");
@@ -141,7 +142,7 @@
                     var num = (array.length - ( Math.floor(array.length / i) * i));
                     // i by malo byt mensie ako 1/3 z pola, cize aby sa dali vykreslit aspon 3 vysledky
                     if (num < 6 && i < (array.length / 3)) {
-                        $scope.data.availableOptions.push({ id: i, name: i});
+                        $scope.data.availableOptions.push({id: i, name: i});
                     }
                 }
 
@@ -173,14 +174,14 @@
 
                 if ($scope.detailResult && $scope.detailResult.time) {
                     timeCount = $scope.detailResult.time.length;
-                    timeFinished = $scope.detailResult.time[ timeCount - 1 ];
+                    timeFinished = $scope.detailResult.time[timeCount - 1];
 
                     // vypocet, aby vzdy trvala simulacia rovnako, nezalezi na cislo vzorkovania
                     timeoutNumber = (timeFinished / (timeCount / sampling)) * timeCount;
                 }
 
 
-                timeoutId = $interval(function() {
+                timeoutId = $interval(function () {
 
                     //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
@@ -213,13 +214,13 @@
 
                 if ($scope.detailResult && $scope.detailResult.time) {
                     timeCount = $scope.detailResult.time.length;
-                    timeFinished = $scope.detailResult.time[ timeCount - 1 ];
+                    timeFinished = $scope.detailResult.time[timeCount - 1];
 
                     // vypocet, aby vzdy trvala simulacia rovnako, nezalezi na cislo vzorkovania
                     timeoutNumber = (timeFinished / (timeCount / sampling)) * timeCount;
                 }
 
-                timeoutId = $interval(function() {
+                timeoutId = $interval(function () {
 
                     //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
@@ -232,6 +233,51 @@
 
                 }, timeoutNumber);
             };
+
+        }])
+        .controller("SectionsCtrl", ["$scope", "$cookies", function ($scope, $cookies) {
+            console.log("SectionsCtrl started...");
+            $scope.loggedUser = $cookies.get('username');
+
+            this.selected = 0;
+            this.headerName = "Simulácia šikmého vrhu";
+
+            this.selectSection = function (selected, headerName) {
+                this.selected = selected;
+                this.headerName = headerName;
+            };
+
+            this.isSelected = function (checkNumber) {
+                return this.selected === checkNumber;
+            };
+        }])
+        .controller("SimulationCtrl", ["$scope", "$http", function ($scope, $http) {
+            console.log("SimulationCtrl started...");
+
+            $scope.runMatlabWithParams = function (v0, alfa_deg) {
+
+                console.log("scope simulation: ", $scope);
+
+                if (v0 && alfa_deg) {
+                    var data = {
+                        'v0': v0,
+                        'alfa_deg' : alfa_deg
+                    };
+
+                    $http.post("/matlab/run", data).then(function (response) {
+                        console.log("Express said: ", response.data);
+
+                        // vybrat prvy tab kde sa zobrazia data
+                        $scope.$parent.section.selectSection(1, 'Realtime údaje');
+
+                        // nastavenie simulacie na spustenu a schovat dalsie spustenie pre usera kym sa neskoci prva
+
+                    }, function (response) {
+                        console.log("error: ", response);
+                    });
+                }
+            };
+
 
         }]);
 })(angular);
