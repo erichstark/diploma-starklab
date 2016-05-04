@@ -17,29 +17,13 @@
 <canvas id="updating-chart" width="1200" height="300"></canvas>
 
 <div ng-controller="TableCtrl">
-	<ui-projectile ng-model="rows"></ui-projectile>
+	<ui-projectile></ui-projectile>
 
-	<div>
-		<table>
-			<thead>
-			<tr>
-				<th width="100">Data time</th>
-				<th width="100">Data x</th>
-				<th width="100">Data y</th>
-				<th width="100">Data vy</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr ng-repeat="rowContent in rows">
-				<td>{{rowContent.time}}</td>
-				<td>{{rowContent.x}}</td>
-				<td>{{rowContent.y}}</td>
-				<td>{{rowContent.vy}}</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
+	<ui-table></ui-table>
 </div>
+
+
+
 
 
 

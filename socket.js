@@ -52,6 +52,7 @@ app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
 app.use("/", express.static(__dirname + '/app/'));
+app.use("/templates/", express.static(__dirname + '/app/directives/templates/'));
 app.use("/node_modules/", express.static(__dirname + '/node_modules/'));
 app.use("/assets/", express.static(__dirname + '/assets/'));
 
@@ -100,7 +101,7 @@ app.post('/login', function (req, res) {
 
                 req.session.user = req.body.username;
                 res.cookie('username', req.body.username);
-                res.redirect('/matlab');
+                res.redirect('/dash');
 
             }
         });

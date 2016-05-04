@@ -1,12 +1,6 @@
 (function (document, angular) {
     "use strict";
     angular.module("starkLab.directives", [])
-        .directive('appVersion', ['version', function (version) {
-            return function (scope, elm, attrs) {
-                elm.text(version);
-            };
-        }])
-
         .directive('uiProjectile', ['$interval', 'dateFilter', function ($interval, dateFilter) {
             return {
                 restrict: 'E',
@@ -220,5 +214,16 @@
                 }
             };
 
+        }])
+        .directive('uiTable', ['$interval', function ($interval) {
+            return {
+                restrict: "E",
+                templateUrl: './templates/table.html',
+                link: function(scope, element, attrs, ctrl) {
+                    console.log("started uiTable", scope.rows);
+
+                    
+                }
+            };
         }]);
 })(document, angular);

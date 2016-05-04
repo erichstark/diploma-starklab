@@ -117,27 +117,8 @@
 				<canvas id="updating-chart" width="1200" height="300"></canvas>
 
 				<div ng-controller="TableCtrl">
-					<ui-projectile ng-model="rows"></ui-projectile>
-					<div>
-						<table>
-							<thead>
-							<tr>
-								<th width="100">Data time</th>
-								<th width="100">Data x</th>
-								<th width="100">Data y</th>
-								<th width="100">Data vy</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr ng-repeat="rowContent in rows">
-								<td>{{rowContent.time}}</td>
-								<td>{{rowContent.x}}</td>
-								<td>{{rowContent.y}}</td>
-								<td>{{rowContent.vy}}</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
+					<ui-projectile></ui-projectile>
+					<ui-table></ui-table>
 				</div>
 
 				<script>
@@ -222,27 +203,8 @@
 					<br />
 
 					<!-- create reusable directive -->
-					<h3>Full data table</h3>
-					<div>
-						<table>
-							<thead>
-							<tr>
-								<th width="100">Data time</th>
-								<th width="100">Data x</th>
-								<th width="100">Data y</th>
-								<th width="100">Data vy</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr ng-repeat="result in detailData">
-								<td>{{result.time}}</td>
-								<td>{{result.x}}</td>
-								<td>{{result.y}}</td>
-								<td>{{result.vy}}</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
+					<h3>Table with full data</h3>
+					<ui-table></ui-table>
 
 
 

@@ -117,10 +117,10 @@
                 console.log("detail ID: ", detail);
 
                 $scope.detailResult = detail;
-                $scope.detailData = [];
+                $scope.rows = [];
 
                 for (var i = 0; i < $scope.detailResult.time.length; i++) {
-                    $scope.detailData.push({
+                    $scope.rows.push({
                         x: $scope.detailResult.x[i],
                         y: $scope.detailResult.y[i],
                         vy: $scope.detailResult.vy[i],
