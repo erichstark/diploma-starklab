@@ -9,7 +9,7 @@ var ldap = require('ldapjs');
 var session = require('express-session');
 
 // max age v sec * 1000, nastavit unlimited, delete az po logout
-app.use(session({ secret: 'starkLab mouse', cookie: { maxAge: 900000 }, rolling: true }));
+app.use(session({key: 'userID', secret: 'starkLab mouse', cookie: { maxAge: 900000 }, rolling: true, resave: false, saveUninitialized: false }));
 
 
 var url = 'mongodb://localhost:27017/test';
@@ -110,10 +110,15 @@ app.post('/login', function (req, res) {
     }
 });
 
-app.post('/logout', function (req, res) {
-    // delete session
-
-    res.redirect('/');
+// delete session
+app.get('/logout', function (req, res) {
+    if (req.session && req.session.user) {
+        req.session.destroy(function () {
+            res.clearCookie('username');
+            res.clearCookie('userID');
+            res.redirect('/');
+        });
+    }
 });
 
 app.get('/dashboard', function (req, res) {
