@@ -9,7 +9,8 @@ var ldap = require('ldapjs');
 var session = require('express-session');
 
 // max age v sec * 1000, nastavit unlimited, delete az po logout
-app.use(session({key: 'userID', secret: 'keyboard cat', cookie: {maxAge: 1200000}}));
+app.use(session({ secret: 'starkLab mouse', cookie: { maxAge: 900000 }, rolling: true }));
+
 
 var url = 'mongodb://localhost:27017/test';
 
@@ -100,6 +101,7 @@ app.post('/login', function (req, res) {
                 req.session.user = req.body.username;
                 res.cookie('username', req.body.username);
                 res.redirect('/matlab');
+
             }
         });
 
