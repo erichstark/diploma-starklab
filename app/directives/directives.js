@@ -222,7 +222,13 @@
                 link: function(scope, element, attrs, ctrl) {
                     console.log("started uiTable", scope.rows);
 
-                    
+                    console.log("element ", element);
+
+                    scope.$watchCollection("rows", function (val) {
+                       if (val) {
+                           element[0].scrollIntoView(false);
+                       }
+                    });
                 }
             };
         }]);
