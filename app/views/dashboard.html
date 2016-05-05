@@ -88,7 +88,8 @@
 		<div class="mdl-grid demo-content" ng-show="section.isSelected(0)">
 			<!-- Spodna cast - vyber parametrov simulacie -->
 			<div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-				Vsetky informacie o sikmom vrhu a obrazky
+				
+
 			</div>
 			<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
 				<div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
@@ -114,7 +115,7 @@
 
 		<div class="mdl-grid demo-content" ng-show="section.isSelected(1)" ng-controller="TableCtrl">
 			<div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-				<canvas id="updating-chart" width="1200" height="300"></canvas>
+				<canvas id="updating-chart" width="600" height="300"></canvas>
 
 				<!--<div ng-controller="TableCtrl">-->
 					<ui-projectile></ui-projectile>
@@ -140,7 +141,7 @@
 
 					// Reduce the animation steps for demo clarity.
 					var myLiveChart = new Chart(ctx).Line(startingData, {
-						responsive: true,
+						responsive: false,
 						animationEasing: 'easeOutBounce',
 						animationSteps: 15,
 						scaleGridLineColor: 'lightgray'
@@ -155,93 +156,95 @@
 					</div>
 					<div class="mdl-card__supporting-text mdl-color-text--grey-600" style="overflow: scroll; height: 420px;">
 						<!--<div ng-controller="TableCtrl">-->
-							<ui-table></ui-table>
+						<ui-table></ui-table>
 						<!--</div>-->
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="mdl-grid demo-content" ng-show="section.isSelected(2)">
+		<div class="mdl-grid demo-content" ng-show="section.isSelected(2)" ng-controller="ResultsCtrl">
 			<!-- Spodna cast - vyber parametrov simulacie -->
-			<div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-				<div ng-app="starkLab" ng-controller="ResultsCtrl">
-
-				<h2>My all simulations.</h2>
+			<div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+				<h2>Všetky simulácie</h2>
 				<table >
 					<thead>
-					<tr>
-						<th width="100">User name</th>
-						<th width="120">Date</th>
-						<th width="100">Simulation</th>
-						<th width="100">More info</th>
-					</tr>
+						<tr>
+							<th width="100">Užívateľ</th>
+							<th width="120">Dátum</th>
+							<th width="100">Typ simulácie</th>
+							<th width="130">Vybrať simuláciu</th>
+							<th width="130">Zmazať simuláciu</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr ng-repeat="result in results track by $index">
-						<td>{{result.user}}</td>
-						<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
-						<td>{{result.experiment}}</td>
-						<td><button ng-click="showDetails(result)">Select</button></td>
-					</tr>
+						<tr ng-repeat="result in results track by $index">
+							<td>{{result.user}}</td>
+							<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
+							<td>{{result.experiment}}</td>
+							<td><button ng-click="showDetails(result)">Vybrať</button></td>
+							<td><button ng-click="removeSimulation(result)">Zmazať</button></td>
+						</tr>
 					</tbody>
 				</table>
 
-				<div ng-show="dashboardAvailable">
-					<button ng-click="startGraph()">Run graph animation with full data</button><!--<input type="number" ng-model="sampling" placeholder="sampling">-->
+			</div>
+
+				<div id="simulation-view" class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col" ng-show="dashboardAvailable">
+					<button ng-click="startGraph()">Run graph animation with full data</button>
 					<label for="repeatSelect"> Repeat select: </label>
 					<select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
 						<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
 					</select>
-					<canvas id="results-chart" width="1200" height="300"></canvas>
 
+					<canvas id="results-chart" width="600" height="300"></canvas>
 
 					<button ng-click="startAnimation2()">Run canvas animation with full data</button></span>
 					<br />
 
-					<div ng-show="dashboardAvailable">
-						<ui-projectile ng-model="results"></ui-projectile>
-					</div>
+					<ui-projectile ng-model="results"></ui-projectile>
 					<br />
 
-					<!-- create reusable directive -->
-					<h3>Table with full data</h3>
-					<ui-table></ui-table>
+					<script>
+						var canvasResults = document.getElementById('results-chart'),
+								ctxResults = canvasResults.getContext('2d'),
+								startingDataResults = {
+									labels: [1],
+									datasets: [
+										{
+											fillColor: "rgba(220,220,220,0.2)",
+											strokeColor: "rgba(220,220,220,1)",
+											pointColor: "rgba(220,220,220,1)",
+											pointStrokeColor: "#fff",
+											data: {}
+										}
+									]
+								},
+								latestLabelResults = startingDataResults.labels[0];
 
+						// Reduce the animation steps for demo clarity.
+						var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
+							responsive: false,
+							animationEasing: 'easeOutBounce',
+							animationSteps: 15,
+							scaleGridLineColor: 'lightgray',
+							maintainAspectRatio: true
+						});
 
-
+					</script>
 				</div>
-
-				<script>
-					var canvasResults = document.getElementById('results-chart'),
-							ctxResults = canvasResults.getContext('2d'),
-							startingDataResults = {
-								labels: [1],
-								datasets: [
-									{
-										fillColor: "rgba(220,220,220,0.2)",
-										strokeColor: "rgba(220,220,220,1)",
-										pointColor: "rgba(220,220,220,1)",
-										pointStrokeColor: "#fff",
-										data: {}
-									}
-								]
-							},
-							latestLabelResults = startingDataResults.labels[0];
-
-					// Reduce the animation steps for demo clarity.
-					var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
-						responsive: true,
-						animationEasing: 'easeOutBounce',
-						animationSteps: 15,
-						scaleGridLineColor: 'lightgray',
-						maintainAspectRatio: true
-					});
-
-				</script>
-
+				<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing" ng-show="dashboardAvailable">
+					<div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+						<div class="mdl-card__title mdl-color--teal-300">
+							<h2 class="mdl-card__title-text">Tabuľka údajov</h2>
+						</div>
+						<div class="mdl-card__supporting-text mdl-color-text--grey-600" style="overflow: scroll; height: 520px;">
+							<!--<div ng-controller="TableCtrl">-->
+							<ui-table></ui-table>
+							<!--</div>-->
+						</div>
+					</div>
 				</div>
-			</div>
 
 		</div>
 

@@ -23,6 +23,24 @@ var insertDocument = function (db, obj, res) {
     });
 };
 
+var removeSimulation = function (db, id, res) {
+    var col = db.collection('projectile');
+    // Remove and return a document
+    col.findOneAndDelete( { _id: ObjectId(id) }, function(err, r) {
+        // assert.equal(null, err);
+        // assert.ok(r.value.b == null);
+
+        if (err == null) {
+            db.close();
+            res.sendStatus(200);
+        } else {
+            console.log("remove one error");
+            db.close();
+            res.sendStatus(500);
+        }
+    });
+};
+
 var findSimulation = function (db, sim, callback) {
     var query = {};
     var user = sim.user;
@@ -62,10 +80,6 @@ app.get('/', function (req, res) {
 
 app.get('/results', function (req, res) {
     res.sendFile(__dirname + '/app/views/results.html');
-});
-
-app.get('/dash', function (req, res) {
-    res.sendFile(__dirname + '/app/views/dashboard.html');
 });
 
 app.post('/login', function (req, res) {
@@ -111,6 +125,20 @@ app.post('/login', function (req, res) {
     }
 });
 
+// middleware to check logged user through browser or result from matlab
+app.use(function (req, res, next) {
+    if ((req.session && req.session.user) || req.body && req.body.result && req.body.result.user) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+});
+
+app.get('/dash', function (req, res) {
+    res.sendFile(__dirname + '/app/views/dashboard.html');
+});
+
+
 // delete session
 app.get('/logout', function (req, res) {
     if (req.session && req.session.user) {
@@ -128,15 +156,6 @@ app.get('/dashboard', function (req, res) {
     if (req.session && req.session.user) {
         console.log("User: ", req.session.user);
         res.sendFile(__dirname + '/app/views/index.html');
-    } else {
-        res.redirect('/');
-    }
-});
-
-// middleware to check logged user through browser or result from matlab
-app.use(function (req, res, next) {
-    if ((req.session && req.session.user) || req.body && req.body.result && req.body.result.user) {
-        next();
     } else {
         res.redirect('/');
     }
@@ -175,6 +194,22 @@ app.post('/mongo/insert/one', function (req, res) {
         if (err === null) {
             console.log("Connected correctly to server.");
             insertDocument(db, req.body, res);
+        }
+    });
+});
+
+app.delete('/mongo/delete/:id', function (req, res) {
+    console.log("mongo remove one");
+
+    // TODO: pridat za mongo :user a overit aby si mazal len svoje prihlaseny user
+
+    MongoClient.connect(url, function (err, db) {
+        if (err === null) {
+            console.log("Connected correctly to server.");
+            console.log("REMOVE: ", req.params.id);
+
+            removeSimulation(db, req.params.id, res);
+
         }
     });
 });

@@ -154,6 +154,29 @@
                 // }, function (response) {
                 //     console.log("error: ", response);
                 // });
+
+                setTimeout(function () {
+                    var element = document.getElementById("simulation-view");
+                    element.scrollIntoView();
+                }, 500);
+
+            };
+
+            $scope.removeSimulation = function (sim) {
+                var index = $scope.results.indexOf(sim);
+                var simId = sim._id;
+
+                console.log("simIDDD: ", simId);
+
+                $scope.results.splice(index, 1);
+
+                $http.delete('/mongo/delete/' + simId).then(function (response) {
+                    console.log("Mongo remove one: ", response.data);
+
+                }, function (response) {
+                    console.log("mongo remove error: ", response);
+                });
+                
             };
 
             $scope.startGraph = function () {
