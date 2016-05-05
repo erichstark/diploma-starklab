@@ -119,6 +119,8 @@ app.get('/logout', function (req, res) {
             res.clearCookie('userID');
             res.redirect('/');
         });
+    } else {
+        res.redirect('/');
     }
 });
 
