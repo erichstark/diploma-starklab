@@ -1,18 +1,18 @@
-<table id="{{ ::uniqueId }}">
+<table id="{{ ::uniqueId }}" class="table-data">
 	<thead>
 		<tr>
-			<th width="100">Čas</th>
-			<th width="100">Os X</th>
-			<th width="100">Os Y</th>
-			<th width="100">Rýchlosť y</th>
+			<th>Čas</th>
+			<th>Os x</th>
+			<th>Os x</th>
+			<th>Rýchlosť y</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="rowContent in rows">
-			<td>{{rowContent.time}}</td>
-			<td>{{rowContent.x}}</td>
-			<td>{{rowContent.y}}</td>
-			<td>{{rowContent.vy}}</td>
+		<tr ng-repeat="data in rows">
+			<td>{{ data.time }}</td>
+			<td>{{ data.x }}</td>
+			<td>{{ data.y }}</td>
+			<td>{{ data.vy }}</td>
 		</tr>
 	</tbody>
 </table>

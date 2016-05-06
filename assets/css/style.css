@@ -59,6 +59,10 @@ table > tbody > tr:nth-child(odd) {
 	background-color: lightgray;
 }
 
+table.table-data > thead > tr > th {
+	width: 100px;
+}
+
 
 select {
 	width: 130px;
