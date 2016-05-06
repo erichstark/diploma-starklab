@@ -1,4 +1,6 @@
-jQuery.fn.tableToCSV = function() {
+jQuery.fn.tableToCSV = function(dateExecuted) {
+
+	var date = new Date(dateExecuted);
     
     var clean_text = function(text){
         text = text.replace(/"/g, '""');
@@ -31,7 +33,12 @@ jQuery.fn.tableToCSV = function() {
 			var uri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
 			var download_link = document.createElement('a');
 			download_link.href = uri;
-			var ts = new Date().getTime();
+			var ts = date.getFullYear() + "-" + (date.getMonth() + 1 < 10 ? "0"
+				+ (date.getMonth() + 1) : date.getMonth() + 1) + "-"
+				+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate())
+				+ "-T" + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours())
+				+ "-" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes())
+				+ "-" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
 			if(caption==""){
 				download_link.download = ts+".csv";
 			} else {
