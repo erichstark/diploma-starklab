@@ -149,25 +149,42 @@
                                     }
                                 ]
                             },
-                            latestLabelResults = startingDataResults.labels[0];
-
-                        if (attrs["type"] == "results") {
-                            // Reduce the animation steps for demo clarity.
-                            scope.$parent.myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
+                            options = {
                                 responsive: false,
                                 animationEasing: 'easeOutBounce',
                                 animationSteps: 15,
                                 scaleGridLineColor: 'lightgray',
                                 maintainAspectRatio: true
-                            });
+                            };
+
+                        if (attrs["type"] == "results") {
+                            scope.$parent.myResultsChart = new Chart(ctxResults).Line(startingDataResults, options);
                         } else if (attrs["type"] == "realtime") {
-                            scope.$parent.myLiveChart = new Chart(ctxResults).Line(startingDataResults, {
-                                responsive: false,
-                                animationEasing: 'easeOutBounce',
-                                animationSteps: 15,
-                                scaleGridLineColor: 'lightgray'
-                            });
+                            scope.$parent.myLiveChart = new Chart(ctxResults).Line(startingDataResults, options);
                         }
+
+                        scope.$parent.resetCanvas = function () {
+                            var ctx = canvasResults.getContext('2d');
+
+                            var data = startingDataResults = {
+                                    labels: [1],
+                                    datasets: [
+                                        {
+                                            fillColor: "rgba(220,220,220,0.2)",
+                                            strokeColor: "rgba(220,220,220,1)",
+                                            pointColor: "rgba(220,220,220,1)",
+                                            pointStrokeColor: "#fff",
+                                            data: {}
+                                        }
+                                    ]
+                                };
+
+                            if (attrs["type"] == "results") {
+                                scope.$parent.myResultsChart = new Chart(ctx).Line(data, options);
+                            } else if (attrs["type"] == "realtime") {
+                                scope.$parent.myLiveChart = new Chart(ctx).Line(data, options);
+                            }
+                        };
 
                     }
                 }

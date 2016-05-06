@@ -27,14 +27,14 @@
 
                 // register interval when array from matlab is empty
                 if (msg.result.status === "running" && !angular.isArray(msg.result.data.time)) {
-                    console.log("first data");
+                    console.log("Simulation status running...");
 
                     timeoutId = $interval(function () {
-                        console.log("concatedXData: ", update, concatedXData, concatedXData.length);
+                        //console.log("concatedXData: ", update, concatedXData, concatedXData.length);
 
                         // run animation when some data is available
                         if (concatedXData && concatedXData.length > 200) {
-                            if (update + 20 > concatedXData.length) {
+                            if (update + 35 > concatedXData.length) {
                                 $scope.myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
                                 $scope.redrawCanvas(concatedXData[concatedXData.length - 1], concatedYData[concatedYData.length - 1]);
 
@@ -64,24 +64,18 @@
 
                 if (msg.result.status === "running" && angular.isArray(msg.result.data.time)) {
 
-                    $scope.canvasRun = true;
-
-                    console.log("partial data: ", msg.result.data.x);
                     concatedTimeData = concatedTimeData.concat(msg.result.data.time);
                     concatedXData = concatedXData.concat(msg.result.data.x);
                     concatedYData = concatedYData.concat(msg.result.data.y);
                     concatedVyData = concatedVyData.concat(msg.result.data.vy);
 
                 } else if (msg.result.status === "stopped") {
-                    console.log("STOPPED");
+                    console.log("Simulation status stopped...");
 
                     var obj = new ProjectileDataObject(loggedUser, concatedTimeData, concatedXData, concatedYData, concatedVyData);
 
-                    // FIXME: uncoment to save to database
+                    // FIXME: need cleanup after insert
                     insertDataToDatabase(obj);
-                    // need cleanup after insert
-
-                    console.log("Data full: ", obj);
                 }
             });
 
@@ -246,6 +240,14 @@
                     }
 
                 }, timeoutNumber);
+            };
+
+            $scope.refreshData = function () {
+                $scope.myResultsChart.destroy();
+                $scope.myResultsChart.clear();
+
+                console.log("scope ctrl: ", $scope);
+                $scope.resetCanvas();
             };
 
             $scope.exportHTMLTable = function () {

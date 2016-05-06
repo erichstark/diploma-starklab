@@ -65,3 +65,7 @@ select {
 	height: 36px;
 	background-color: #ff4081;
 }
+
+button {
+	margin: 5px !important;
+}

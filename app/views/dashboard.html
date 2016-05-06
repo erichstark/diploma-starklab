@@ -122,16 +122,15 @@
 					<div class="mdl-card__supporting-text mdl-color-text--grey-600" ng-controller="SimulationCtrl">
 						<div>
 							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input type="text" ng-model="simulation.input.v0" name="v0" value="80"
-									   class="mdl-textfield__input" id="input-v0">
+								<input type="text" pattern="-?[0-9]*(\.[0-9]+)?" ng-model="simulation.input.v0" name="v0" value="80" class="mdl-textfield__input" id="input-v0">
 								<label for="input-v0" class="mdl-textfield__label">Počiatočná rýchlosť v0</label>
+								<span class="mdl-textfield__error">Vstup musí byť číslo.</span>
 							</div>
 							<br>
 							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input type="text" ng-model="simulation.input.alfa_deg" name="alfa_deg" value="40"
-									   class="mdl-textfield__input" id="input-alfa">
-								<label for="input-alfa" class="mdl-textfield__label">Počiatočný uhol alfa v
-									stupňoch</label>
+								<input type="text" pattern="-?[0-9]*(\.[0-9]+)?" ng-model="simulation.input.alfa_deg" name="alfa_deg" value="40" class="mdl-textfield__input" id="input-alfa">
+								<label for="input-alfa" class="mdl-textfield__label">Počiatočný uhol alfa v stupňoch</label>
+								<span class="mdl-textfield__error">Vstup musí byť číslo.</span>
 							</div>
 						</div>
 						<button ng-click="runMatlabWithParams(simulation.input.v0, simulation.input.alfa_deg)"
@@ -197,15 +196,16 @@
 
 			</div>
 
-			<div id="simulation-view" class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col"
+			<div id="simulation-view" class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col"
 				 ng-show="dashboardAvailable">
 
 				<h2>Graf vykreslujúci [x, y] súradnice</h2>
 				<label for="repeatSelect"> Vzorka dát: </label>
 				<select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
 					<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
-				</select><br><br>
+				</select><br>
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="startGraph()">Zobraziť údaje v grafe</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="refreshData()">Resetnúť graf</button><br>
 				<ui-graph type="results"></ui-graph>
 
 				<h2>Animácia pohybu guličky cez [x, y] súradnice</h2>
