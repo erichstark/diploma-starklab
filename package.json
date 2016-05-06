@@ -1,6 +1,6 @@
 {
   "name": "StarkLab",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "chart.js": "1.1.x",
     "express": "4.13.4",
     "express-session": "^1.13.0",
+    "jquery": "^2.2.3",
     "ldapjs": "^1.0.0",
     "mongodb": "^2.1.14",
     "serve-favicon": "~2.3.0",
