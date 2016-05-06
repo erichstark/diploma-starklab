@@ -3,6 +3,26 @@ body {
 	margin: 50px auto;
 }
 
+h1 {
+
+}
+
+h2 {
+	font-size: 1.4em !important;
+}
+
+h3 {
+
+}
+
+h4 {
+	font-weight: 400;
+}
+
+h5 {
+
+}
+
 nav > a.mdl-navigation__link {
 	padding: 16px 20px !important;
 }
@@ -20,4 +40,23 @@ span.logged-user {
 
 div.web-content {
 	padding: 10px;
+}
+
+table {
+	text-align: center;
+}
+
+table.simulation-list > thead > tr {
+	background-color: lightslategray;
+}
+
+table > tbody > tr:nth-child(odd) {
+	background-color: lightgray;
+}
+
+
+select {
+	width: 130px;
+	height: 36px;
+	background-color: #ff4081;
 }
