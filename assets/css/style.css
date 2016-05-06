@@ -2,3 +2,22 @@ body {
 	width: 250px;
 	margin: 50px auto;
 }
+
+nav > a.mdl-navigation__link {
+	padding: 16px 20px !important;
+}
+
+nav > a.mdl-navigation__link > i {
+	margin-top: 2px;
+	margin-right: 6px;
+	margin-bottom: 2px;
+}
+
+span.logged-user {
+	font-size: larger;
+	margin-left: 5px;
+}
+
+div.web-content {
+	padding: 10px;
+}

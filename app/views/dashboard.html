@@ -1,45 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="sk">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+	<meta name="description" content="Web aplikácia, ktorá sprístupňuje rozhranie matlabu pre potrebu simulácií.">
+	<meta name="keywords" content="html, js, angularjs, virtual laboratory, starklab, vlab, matlab">
+	<meta name="author" content="Bc. Erich Stark">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-	<title>Material Design Lite</title>
-
-	<!-- Add to homescreen for Chrome on Android -->
-	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="icon" sizes="192x192" href="images/android-desktop.png">
-
-	<!-- Add to homescreen for Safari on iOS -->
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="apple-mobile-web-app-title" content="Material Design Lite">
-	<link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
-
-	<!-- Tile icon for Win8 (144x144 + tile color) -->
-	<meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-	<meta name="msapplication-TileColor" content="#3372DF">
+	<title>StarkLab</title>
 
 	<link rel="shortcut icon" href="images/favicon.png">
 
-
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+	<link rel="stylesheet"
+		  href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<!--<link rel="stylesheet" href="$$hosted_libs_prefix$$/$$version$$/material.cyan-light_blue.min.css">-->
-	<link rel="stylesheet" href="styles.css">
-	<style>
-		#view-source {
-			position: fixed;
-			display: block;
-			right: 0;
-			bottom: 0;
-			margin-right: 40px;
-			margin-bottom: 40px;
-			z-index: 900;
-		}
-	</style>
+	<link rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" href="/node_modules/material-design-lite/material.min.css">
 
+	<script src="/node_modules/material-design-lite/material.min.js"></script>
 	<script src="/node_modules/angular/angular.min.js"></script>
 	<script src="/node_modules/angular-cookies/angular-cookies.min.js"></script>
 	<script src="/node_modules/socket.io-client/socket.io.js"></script>
@@ -56,7 +34,7 @@
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 	<header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
 		<div class="mdl-layout__header-row">
-			<span class="mdl-layout-title">{{ section.headerName }}</span>
+			<span ng-bind="section.headerName" class="mdl-layout-title"></span>
 			<div class="mdl-layout-spacer"></div>
 			<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
 				<i class="material-icons">more_vert</i>
@@ -71,43 +49,94 @@
 	<div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
 		<header class="demo-drawer-header">
 			<div class="demo-avatar-dropdown">
-				<span>Prihlásený {{ loggedUser }}</span><span style="float: right;"><a href="/logout">Odhlásiť</a></span>
-				<div class="mdl-layout-spacer"></div>
+				<i class="mdl-color-text--blue-gray-400 material-icons" role="presentation">account_circle</i><span
+					class="logged-user" ng-bind="loggedUser"></span><a href="/logout"><i
+					class="mdl-color-text--blue-gray-400 material-icons" role="presentation" style="float: right;">exit_to_app</i></a>
 			</div>
 		</header>
 		<nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(0, 'Simulácia šikmého vrhu')"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Simulácia šikmého vrhu</a>
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(1, 'Realtime údaje')"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">inbox</i>Realtime údaje</a>
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(2, 'Zobraziť simulácie')"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Zobraziť simulácie</a>
-			<a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">report</i>Spam</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(0, 'Simulácia šikmého vrhu')"><i
+					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">playlist_play</i>Simulácia</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(1, 'Realtime údaje')"><i
+					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">show_chart</i>Realtime
+				údaje</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(2, 'Zobraziť simulácie')"><i
+					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud</i>Zobraziť simulácie</a>
 			<div class="mdl-layout-spacer"></div>
-			<a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Help</a>
+			<a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
+													   role="presentation">help_outline</i>Help</a>
 		</nav>
 	</div>
 	<main class="mdl-layout__content mdl-color--grey-100">
 		<div class="mdl-grid demo-content" ng-show="section.isSelected(0)">
 			<!-- Spodna cast - vyber parametrov simulacie -->
-			<div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-				
+			<div class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
+				<h4>Šikmý vrh</h4>
+				Šikmým vrhom nazývame pohyb telesa v tiažovom poli, kde počiatočná rýchlosť zviera z osou <em>x</em>
+				nenulový uhol.
+				Pri kladnom uhle 0&deg; < &alpha; < 90&deg; sa jedná o šikmý vrh hore. Ak vrh prebieha vo vzduchu tak sa
+				pohybuje po tzv. balistickej krivke.
+
+				<h4>Matematický model</h4>
+				Predpokladajme, že teleso má počiatočnú rýchlosť <em>v<sub>0</sub></em> zvierajúcu s vodorovným smerom
+				uhol &alpha;. Následný pohyb
+				sa skladá z rovnomerného priamočiareho pohybu touto rýchlosťou v pôvodnom smere (týmto smerom položíme
+				os <em>x</em>)
+				a z volného pádu (rovnomerne zrýchleného pohybu) vo smere tiažového zrýchlenia <em>g</em>, ktorý je
+				možné ztotožniť s
+				pohybom v smere osi <em>y</em>. V smere osi <em>z</em> teda pohyb neprebieha (trajektóriou teda bude
+				rovná krivka).
+
+				<br><br>
+				Preto platí: <br><br>
+				<img src="/assets/img/simulacie/sikmy/rovnice_x_y.png" alt="Rovnica x a y.">
+
+				<br><br>
+				Ak vylúčime čas t a presuneme počiatok súradnicovej sústavy do body <em>[x<sub>0</sub>,
+				y<sub>0</sub>]</em> tak získame rovnicu trajektorie šikmého vrhu: <br><br>
+				<img src="/assets/img/simulacie/sikmy/rovnica_y.png" alt="Rovnica trajektorie.">
+
+				<br><br>
+				Pre šikmý vrh nahor je možné z tejto rovnice určiť maximálnu dosiahnutú výšku: <br><br>
+				<img src="/assets/img/simulacie/sikmy/rovnica_y_max.png" alt="Rovnica maximálnej dosiahnutej výšky.">
+
+				<br><br>
+				a dĺžku vrhu (teda vzdialenosť, po ktorej teleso klesne do pôvodnej výšky), inak povedané dostrel:
+				<br><br>
+				<img src="/assets/img/simulacie/sikmy/rovnica_dlzky.png" alt="Rovnica dostrelu.">
+
+				<h4>Ilustrácia</h4>
+				Trajektorie šikmých vrhov pod rôznymi uhlami, ale rovnakou počiatočnou rýchlosťou 10 m/s; <br>
+				t = čas, T = doba letu, R = dostrel (maximálna vzdialenosť), H = najvyšší bod trajektorie. <br><br>
+				<img src="/assets/img/simulacie/sikmy/sikmy_sample.png" width="600" alt="Príklady výstrelu.">
 
 			</div>
-			<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+			<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing"
+				 style="max-height: 270px;">
 				<div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
-					<div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+					<div class="mdl-card__title mdl-color--teal-300">
 						<h2 class="mdl-card__title-text">Parametre simulácie</h2>
 					</div>
 					<div class="mdl-card__supporting-text mdl-color-text--grey-600" ng-controller="SimulationCtrl">
 						<div>
 							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input type="text" ng-model="simulation.input.v0" name="v0" value="80" class="mdl-textfield__input" id="input-v0">
+								<input type="text" ng-model="simulation.input.v0" name="v0" value="80"
+									   class="mdl-textfield__input" id="input-v0">
 								<label for="input-v0" class="mdl-textfield__label">Počiatočná rýchlosť v0</label>
-							</div><br>
+							</div>
+							<br>
 							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input type="text" ng-model="simulation.input.alfa_deg" name="alfa_deg" value="40" class="mdl-textfield__input" id="input-alfa">
-								<label for="input-alfa" class="mdl-textfield__label">Počiatočný uhol alfa v stupňoch</label>
+								<input type="text" ng-model="simulation.input.alfa_deg" name="alfa_deg" value="40"
+									   class="mdl-textfield__input" id="input-alfa">
+								<label for="input-alfa" class="mdl-textfield__label">Počiatočný uhol alfa v
+									stupňoch</label>
 							</div>
 						</div>
-						<button ng-click="runMatlabWithParams(simulation.input.v0, simulation.input.alfa_deg)" type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Spustiť Matlab</button>
+						<button ng-click="runMatlabWithParams(simulation.input.v0, simulation.input.alfa_deg)"
+								type="submit"
+								class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+							Spustiť Matlab
+						</button>
 					</div>
 				</div>
 			</div>
@@ -117,10 +146,7 @@
 			<div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
 				<canvas id="updating-chart" width="600" height="300"></canvas>
 
-				<!--<div ng-controller="TableCtrl">-->
-					<ui-projectile></ui-projectile>
-					<!--<ui-table></ui-table>-->
-				<!--</div>-->
+				<ui-projectile></ui-projectile>
 
 				<script>
 					var canvas = document.getElementById('updating-chart'),
@@ -154,103 +180,105 @@
 					<div class="mdl-card__title mdl-color--teal-300">
 						<h2 class="mdl-card__title-text">Tabuľka údajov</h2>
 					</div>
-					<div class="mdl-card__supporting-text mdl-color-text--grey-600" style="overflow: scroll; height: 420px;">
-						<!--<div ng-controller="TableCtrl">-->
+					<div class="mdl-card__supporting-text mdl-color-text--grey-600"
+						 style="overflow: scroll; height: 420px;">
 						<ui-table></ui-table>
-						<!--</div>-->
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="mdl-grid demo-content" ng-show="section.isSelected(2)" ng-controller="ResultsCtrl">
+		<div class="mdl-grid" ng-show="section.isSelected(2)" ng-controller="ResultsCtrl">
 			<!-- Spodna cast - vyber parametrov simulacie -->
-			<div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+			<div class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
 				<h2>Všetky simulácie</h2>
-				<table >
+				<table>
 					<thead>
-						<tr>
-							<th width="100">Užívateľ</th>
-							<th width="120">Dátum</th>
-							<th width="100">Typ simulácie</th>
-							<th width="130">Vybrať simuláciu</th>
-							<th width="130">Zmazať simuláciu</th>
-						</tr>
+					<tr>
+						<th width="100">Užívateľ</th>
+						<th width="120">Dátum</th>
+						<th width="100">Typ simulácie</th>
+						<th width="130">Vybrať simuláciu</th>
+						<th width="130">Zmazať simuláciu</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="result in results track by $index">
-							<td>{{result.user}}</td>
-							<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
-							<td>{{result.experiment}}</td>
-							<td><button ng-click="showDetails(result)">Vybrať</button></td>
-							<td><button ng-click="removeSimulation(result)">Zmazať</button></td>
-						</tr>
+					<tr ng-repeat="result in results track by $index">
+						<td>{{result.user}}</td>
+						<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
+						<td>{{result.experiment}}</td>
+						<td><a href="" ng-click="showDetails(result)"><i
+								class="mdl-color-text--blue-grey-400 material-icons"
+								role="presentation">cloud_download</i></a></td>
+						<td><a href="" ng-click="removeSimulation(result)"><i
+								class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i></a>
+						</td>
+					</tr>
 					</tbody>
 				</table>
 
 			</div>
 
-				<div id="simulation-view" class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col" ng-show="dashboardAvailable">
-					<button ng-click="startGraph()">Run graph animation with full data</button>
-					<label for="repeatSelect"> Repeat select: </label>
-					<select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
-						<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
-					</select>
+			<div id="simulation-view" class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col"
+				 ng-show="dashboardAvailable">
+				<button ng-click="startGraph()">Run graph animation with full data</button>
+				<label for="repeatSelect"> Repeat select: </label>
+				<select name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
+					<option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+				</select>
 
-					<canvas id="results-chart" width="600" height="300"></canvas>
+				<canvas id="results-chart" width="600" height="300"></canvas>
 
-					<button ng-click="startAnimation2()">Run canvas animation with full data</button></span>
-					<br />
+				<button ng-click="startAnimation2()">Run canvas animation with full data</button>
+				<br/>
 
-					<ui-projectile ng-model="results"></ui-projectile>
-					<br />
+				<ui-projectile ng-model="results"></ui-projectile>
+				<br/>
 
-					<script>
-						var canvasResults = document.getElementById('results-chart'),
-								ctxResults = canvasResults.getContext('2d'),
-								startingDataResults = {
-									labels: [1],
-									datasets: [
-										{
-											fillColor: "rgba(220,220,220,0.2)",
-											strokeColor: "rgba(220,220,220,1)",
-											pointColor: "rgba(220,220,220,1)",
-											pointStrokeColor: "#fff",
-											data: {}
-										}
-									]
-								},
-								latestLabelResults = startingDataResults.labels[0];
+				<script>
+					var canvasResults = document.getElementById('results-chart'),
+							ctxResults = canvasResults.getContext('2d'),
+							startingDataResults = {
+								labels: [1],
+								datasets: [
+									{
+										fillColor: "rgba(220,220,220,0.2)",
+										strokeColor: "rgba(220,220,220,1)",
+										pointColor: "rgba(220,220,220,1)",
+										pointStrokeColor: "#fff",
+										data: {}
+									}
+								]
+							},
+							latestLabelResults = startingDataResults.labels[0];
 
-						// Reduce the animation steps for demo clarity.
-						var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
-							responsive: false,
-							animationEasing: 'easeOutBounce',
-							animationSteps: 15,
-							scaleGridLineColor: 'lightgray',
-							maintainAspectRatio: true
-						});
+					// Reduce the animation steps for demo clarity.
+					var myResultsChart = new Chart(ctxResults).Line(startingDataResults, {
+						responsive: false,
+						animationEasing: 'easeOutBounce',
+						animationSteps: 15,
+						scaleGridLineColor: 'lightgray',
+						maintainAspectRatio: true
+					});
 
-					</script>
-				</div>
-				<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing" ng-show="dashboardAvailable">
-					<div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
-						<div class="mdl-card__title mdl-color--teal-300">
-							<h2 class="mdl-card__title-text">Tabuľka údajov</h2>
-						</div>
-						<div class="mdl-card__supporting-text mdl-color-text--grey-600" style="overflow: scroll; height: 520px;">
-							<!--<div ng-controller="TableCtrl">-->
-							<ui-table></ui-table>
-							<!--</div>-->
-						</div>
+				</script>
+			</div>
+			<div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing"
+				 ng-show="dashboardAvailable">
+				<div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+					<div class="mdl-card__title mdl-color--teal-300">
+						<h2 class="mdl-card__title-text">Tabuľka údajov</h2>
+					</div>
+					<div class="mdl-card__supporting-text mdl-color-text--grey-600"
+						 style="overflow: scroll; height: 520px;">
+						<ui-table></ui-table>
 					</div>
 				</div>
+			</div>
 
 		</div>
 
 	</main>
 </div>
-<link rel="stylesheet" href="/node_modules/material-design-lite/material.min.css">
-<script src="/node_modules/material-design-lite/material.min.js"></script>
 </body>
 </html>
