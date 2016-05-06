@@ -35,7 +35,7 @@
                         // run animation when some data is available
                         if (concatedXData && concatedXData.length > 200) {
                             if (update + 20 > concatedXData.length) {
-                                myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
+                                $scope.myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
                                 $scope.redrawCanvas(concatedXData[concatedXData.length - 1], concatedYData[concatedYData.length - 1]);
 
                                 $scope.rows.push({
@@ -47,7 +47,7 @@
 
                                 $interval.cancel(timeoutId);
                             } else {
-                                myLiveChart.addData([concatedYData[update]], concatedXData[update]);
+                                $scope.myLiveChart.addData([concatedYData[update]], concatedXData[update]);
                                 $scope.redrawCanvas(concatedXData[update], concatedYData[update]);
                                 $scope.rows.push({
                                     x: concatedXData[update],
@@ -146,15 +146,6 @@
                     }
                 }
 
-                // $http.get('/mongo/' + $cookies.get('username') + '/projectile/' + detail._id).then(function (response) {
-                //     console.log("Mongo get selected result: ", response.data);
-                //
-                //     //$scope.results = response.data;
-                //
-                // }, function (response) {
-                //     console.log("error: ", response);
-                // });
-
                 setTimeout(function () {
                     var element = document.getElementById("simulation-view");
                     element.scrollIntoView();
@@ -209,7 +200,7 @@
                     //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
                         //console.log("run canvas int inside", $scope.detailResult.y[update]);
-                        myResultsChart.addData([$scope.detailResult.y[update]], $scope.detailResult.x[update]);
+                        $scope.myResultsChart.addData([$scope.detailResult.y[update]], $scope.detailResult.x[update]);
 
                         update = update + sampling;
                     } else {
@@ -255,6 +246,10 @@
                     }
 
                 }, timeoutNumber);
+            };
+
+            $scope.exportHTMLTable = function () {
+                $("#export-2").tableToCSV($scope.detailResult.executed);
             };
 
         }])
