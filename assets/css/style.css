@@ -1,6 +1,7 @@
 body {
 	width: 250px;
 	margin: 50px auto;
+	background-color: #757575;
 }
 
 h1 {
@@ -9,6 +10,10 @@ h1 {
 
 h2 {
 	font-size: 1.4em !important;
+}
+
+h2.h2-login {
+	font-weight: 800;
 }
 
 h3 {
