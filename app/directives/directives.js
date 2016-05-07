@@ -186,6 +186,30 @@
                             }
                         };
 
+                        scope.$parent.showCanvas = function (x, y) {
+                            var ctx = canvasResults.getContext('2d');
+
+                            var data = startingDataResults = {
+                                labels: x,
+                                datasets: [
+                                    {
+                                        fillColor: "rgba(220,220,220,0.2)",
+                                        strokeColor: "rgba(220,220,220,1)",
+                                        pointColor: "rgba(220,220,220,1)",
+                                        pointStrokeColor: "#fff",
+                                        data: y
+                                    }
+                                ]
+                            };
+
+                            if (attrs["type"] == "results") {
+                                scope.$parent.myResultsChart = new Chart(ctx).Line(data, options);
+                            } else if (attrs["type"] == "realtime") {
+                                scope.$parent.myLiveChart = new Chart(ctx).Line(data, options);
+                            }
+
+                        };
+
                     }
                 }
             };

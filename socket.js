@@ -182,7 +182,6 @@ app.post('/matlab/run', function (req, res) {
 });
 
 app.post('/matlab/result', function (req, res) {
-    console.log(req.body.result.user);
     io.sockets.emit("message:" + req.body.result.user, req.body);
     res.sendStatus(200);
 });

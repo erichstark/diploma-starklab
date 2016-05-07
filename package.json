@@ -23,6 +23,7 @@
     "express-session": "^1.13.0",
     "jquery": "^2.2.3",
     "ldapjs": "^1.0.0",
+    "material-design-lite": "^1.1.3",
     "mongodb": "^2.1.14",
     "serve-favicon": "~2.3.0",
     "shelljs": "^0.7.0",

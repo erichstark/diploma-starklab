@@ -63,6 +63,14 @@ table.table-data > thead > tr > th {
 	width: 100px;
 }
 
+div.table-scroll {
+	overflow: scroll;
+	height: 380px;
+}
+
+div.table-size {
+	max-height: 500px;
+}
 
 select {
 	width: 130px;

@@ -42,18 +42,19 @@
                                     x: concatedXData[concatedXData.length - 1],
                                     y: concatedYData[concatedYData.length - 1],
                                     vy: concatedVyData[concatedVyData.length - 1],
-                                    time: concatedTimeData[concatedTimeData.length - 1],
+                                    time: concatedTimeData[concatedTimeData.length - 1]
                                 });
 
                                 $interval.cancel(timeoutId);
                             } else {
-                                $scope.myLiveChart.addData([concatedYData[update]], concatedXData[update]);
+                                //$scope.myLiveChart.addData([concatedYData[update]], concatedXData[update]);
+                                $scope.myLiveChart.addData([concatedYData[update]], "");
                                 $scope.redrawCanvas(concatedXData[update], concatedYData[update]);
                                 $scope.rows.push({
                                     x: concatedXData[update],
                                     y: concatedYData[update],
                                     vy: concatedVyData[update],
-                                    time: concatedTimeData[update],
+                                    time: concatedTimeData[update]
                                 });
                                 update = update + 20;
                             }
@@ -144,7 +145,6 @@
                     var element = document.getElementById("simulation-view");
                     element.scrollIntoView();
                 }, 500);
-
             };
 
             $scope.removeSimulation = function (sim) {
@@ -161,10 +161,10 @@
                 }, function (response) {
                     console.log("mongo remove error: ", response);
                 });
-                
             };
 
             $scope.startGraph = function () {
+                $scope.refreshData();
 
                 var timeoutId;
                 var timeoutNumber;
@@ -204,6 +204,36 @@
                 }, timeoutNumber);
 
 
+            };
+            
+            $scope.showGraph = function () {
+
+                $scope.refreshData();
+
+                var sampling = 1;
+                var tmpX = [];
+                var tmpY = [];
+
+                if ($scope.data.repeatSelect) {
+                    sampling = parseInt($scope.data.repeatSelect);
+                    console.log("sample: ", sampling);
+
+
+                    if ($scope.data.repeatSelect > 25) {
+                        for (var i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
+                            tmpX.push($scope.detailResult.x[i]);
+                            tmpY.push($scope.detailResult.y[i]);
+                        }
+                    } else {
+                        for (var i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
+                            tmpX.push("");
+                            tmpY.push($scope.detailResult.y[i]);
+                        }
+                    }
+
+                }
+
+                $scope.showCanvas(tmpX, tmpY);
             };
 
             $scope.startAnimation2 = function () {
@@ -253,7 +283,6 @@
             $scope.exportHTMLTable = function () {
                 $("#export-2").tableToCSV($scope.detailResult.executed);
             };
-
         }])
         .controller("SectionsCtrl", ["$scope", "$cookies", function ($scope, $cookies) {
             console.log("SectionsCtrl started...");
