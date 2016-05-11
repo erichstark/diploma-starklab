@@ -17,6 +17,7 @@ Socket.io:
 HTML,CS:
 - option to set sampling of data, every 10, 20, etc...
 - pre sikmy vrh doplnit aj help stranku o com ta simulacia je
+- zobrazit pocet prvkov v tabulke pri generovani, niekde pri nadpise
 
 JS:
 - minification for release (gulp?)

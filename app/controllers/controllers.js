@@ -34,7 +34,8 @@
 
                         // run animation when some data is available
                         if (concatedXData && concatedXData.length > 200) {
-                            if (update + 35 > concatedXData.length) {
+                            if (update + 20 >= concatedXData.length) {
+                                console.log("OUT");
                                 $scope.myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
                                 $scope.redrawCanvas(concatedXData[concatedXData.length - 1], concatedYData[concatedYData.length - 1]);
 
@@ -47,6 +48,7 @@
 
                                 $interval.cancel(timeoutId);
                             } else {
+                                console.log("IN");
                                 //$scope.myLiveChart.addData([concatedYData[update]], concatedXData[update]);
                                 $scope.myLiveChart.addData([concatedYData[update]], "");
                                 $scope.redrawCanvas(concatedXData[update], concatedYData[update]);
