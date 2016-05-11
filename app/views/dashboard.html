@@ -13,6 +13,7 @@
 
 	<link rel="stylesheet"
 		  href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+	<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="/assets/css/style.css">
 	<link rel="stylesheet" href="/node_modules/material-design-lite/material.min.css">
@@ -38,33 +39,20 @@
 	<header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
 		<div class="mdl-layout__header-row">
 			<h1 ng-bind="section.headerName" class="mdl-layout-title"></h1>
-			<div class="mdl-layout-spacer"></div>
-			<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
-				<i class="material-icons">more_vert</i>
-			</button>
-			<ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-				<li class="mdl-menu__item">About</li>
-				<li class="mdl-menu__item">Contact</li>
-				<li class="mdl-menu__item">Legal information</li>
-			</ul>
 		</div>
 	</header>
 	<div class="mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
 		<header>
 			<div>
-				<i class="mdl-color-text--blue-gray-400 material-icons" role="presentation">account_circle</i><span
-					class="logged-user" ng-bind="loggedUser"></span><a href="/logout"><i
-					class="mdl-color-text--blue-gray-400 material-icons" role="presentation" style="float: right;">exit_to_app</i></a>
+				<i class="mdl-color-text--blue-gray-400 material-icons" role="presentation">account_circle</i>
+				<span class="logged-user" ng-bind="loggedUser"></span>
+				<a href="/logout"><i class="mdl-color-text--blue-gray-400 material-icons" role="presentation" style="float: right;">exit_to_app</i></a>
 			</div>
 		</header>
 		<nav class="mdl-navigation mdl-color--blue-grey-800">
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(0, 'Simulácia šikmého vrhu')"><i
-					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">playlist_play</i>Simulácia</a>
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(1, 'Real-time údaje šikmého vrhu')"><i
-					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">show_chart</i>Real-time
-				údaje</a>
-			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(2, 'Uložené simulácie')"><i
-					class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud</i>Zobraziť simulácie</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(0, 'Simulácia šikmého vrhu')" ng-class="{ 'menu-links': section.isSelected(0) }"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">playlist_play</i>Simulácia</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(1, 'Real-time údaje šikmého vrhu')" ng-class="{ 'menu-links': section.isSelected(1) }"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">show_chart</i>Real-time údaje</a>
+			<a class="mdl-navigation__link" href="" ng-click="section.selectSection(2, 'Uložené simulácie')" ng-class="{ 'menu-links': section.isSelected(2) }"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud</i>Zobraziť simulácie</a>
 			<div class="mdl-layout-spacer"></div>
 			<!--<a class="mdl-navigation__link" href=""><i class="mdl-color-text&#45;&#45;blue-grey-400 material-icons" role="presentation">help_outline</i>Pomocník</a>-->
 		</nav>
@@ -113,7 +101,7 @@
 				<img src="/assets/img/simulacie/sikmy/sikmy_sample.png" width="600" alt="Príklady výstrelu.">
 
 			</div>
-			<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing" style="max-height: 270px;">
+			<div class="simulation-form mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
 				<div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
 					<div class="mdl-card__title mdl-color--teal-300">
 						<h2 class="mdl-card__title-text">Parametre simulácie</h2>
@@ -157,6 +145,11 @@
 					</div>
 				</div>
 			</div>
+			<div class="overlay-waiting" ng-show="showOverlay">
+				<div class="awe">
+					<i class="fa fa-spinner fa-pulse"></i>
+				</div>
+			</div>
 		</div>
 
 		<div class="mdl-grid" ng-show="section.isSelected(2)" ng-controller="ResultsCtrl">
@@ -190,8 +183,7 @@
 
 			</div>
 
-			<div id="simulation-view" class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col"
-				 ng-show="dashboardAvailable">
+			<div id="simulation-view" class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col" ng-show="dashboardAvailable">
 
 				<h2>Graf vykreslujúci [x, y] súradnice</h2>
 				<label for="repeatSelect"> Vzorka dát: </label>

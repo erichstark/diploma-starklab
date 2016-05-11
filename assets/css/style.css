@@ -69,6 +69,7 @@ div.table-scroll {
 }
 
 div.table-size {
+	max-width: 300px;
 	max-height: 500px;
 }
 
@@ -80,4 +81,33 @@ select {
 
 button {
 	margin: 5px !important;
+}
+
+.simulation-form {
+	max-width: 280px;
+	max-height: 270px;
+}
+
+.menu-links {
+	background-color: #e0e0e0;
+}
+
+.overlay-waiting {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 50000;
+	background-color: #e0e0e0;
+	opacity: 0.8;
+}
+.overlay-waiting > .awe {
+	position: absolute;
+	top: 25%;
+	left: 15%;
+}
+
+.overlay-waiting > .awe > i {
+	font-size: 20em;
 }

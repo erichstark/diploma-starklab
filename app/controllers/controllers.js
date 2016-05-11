@@ -33,7 +33,7 @@
                         //console.log("concatedXData: ", update, concatedXData, concatedXData.length);
 
                         // run animation when some data is available
-                        if (concatedXData && concatedXData.length > 200) {
+                        if (concatedXData && concatedXData.length > 300) {
                             if (update + 20 >= concatedXData.length) {
                                 console.log("OUT");
                                 $scope.myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
@@ -66,6 +66,10 @@
                 }
 
                 if (msg.result.status === "running" && angular.isArray(msg.result.data.time)) {
+
+                    if ($scope.$parent.showOverlay) {
+                        $scope.$parent.showOverlay = false;
+                    }
 
                     concatedTimeData = concatedTimeData.concat(msg.result.data.time);
                     concatedXData = concatedXData.concat(msg.result.data.x);
@@ -289,6 +293,7 @@
         .controller("SectionsCtrl", ["$scope", "$cookies", function ($scope, $cookies) {
             console.log("SectionsCtrl started...");
             $scope.loggedUser = $cookies.get('username');
+            $scope.showOverlay = false;
 
             this.selected = 0;
             this.headerName = "Simulácia šikmého vrhu";
@@ -320,6 +325,7 @@
 
                         // vybrat prvy tab kde sa zobrazia data
                         $scope.$parent.section.selectSection(1, 'Realtime údaje');
+                        $scope.$parent.showOverlay = true;
 
                         // nastavenie simulacie na spustenu a schovat dalsie spustenie pre usera kym sa neskoci prva
 

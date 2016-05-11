@@ -4,9 +4,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "node socket.js",
-    "watch": "nodemon socket.js",
-    "startBin": "node ./express/bin/web.js"
+    "start": "node ./express/bin/web.js",
+    "watch": "nodemon ./express/bin/web.js"
   },
   "homepage": "https://github.com/erichstark/starklab",
   "repository": {
