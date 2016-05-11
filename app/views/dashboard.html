@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<title>StarkLab</title>
 
-	<link rel="shortcut icon" href="images/favicon.png">
+	<link rel="shortcut icon" href="/assets/img/favicon.ico">
 
 	<link rel="stylesheet"
 		  href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
@@ -154,7 +154,11 @@
 
 		<div class="mdl-grid" ng-show="section.isSelected(2)" ng-controller="ResultsCtrl">
 			<!-- Spodna cast - vyber parametrov simulacie -->
-			<div class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+			<div class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" ng-show="showDatabaseProblem">
+				Problém s pripojením na databázu MongoDB. Overte spojenie.
+			</div>
+
+			<div class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" ng-show="!showDatabaseProblem">
 				<h2>Zoznam všetkých simulácií</h2>
 				<table class="simulation-list">
 					<thead>
@@ -171,16 +175,12 @@
 						<td>{{result.user}}</td>
 						<td>{{result.executed | date: 'dd.MM.yyyy hh:mm'}}</td>
 						<td>{{result.experiment}}</td>
-						<td><a href="" ng-click="showDetails(result)"><i
-								class="mdl-color-text--blue-grey-400 material-icons"
-								role="presentation">cloud_download</i></a></td>
-						<td><a href="" ng-click="removeSimulation(result)"><i
-								class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i></a>
+						<td><a href="" ng-click="showDetails(result)"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">cloud_download</i></a></td>
+						<td><a href="" ng-click="removeSimulation(result)"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i></a>
 						</td>
 					</tr>
 					</tbody>
 				</table>
-
 			</div>
 
 			<div id="simulation-view" class="web-content mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col" ng-show="dashboardAvailable">
@@ -195,7 +195,7 @@
 				<ui-graph type="results"></ui-graph>
 
 				<h2>Animácia pohybu guličky cez [x, y] súradnice</h2>
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="startAnimation2()">Zobraziť údaje v animácií</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="startAnimation2()">Zobraziť údaje v animácií</button><br>
 				<ui-projectile ng-model="results"></ui-projectile>
 				<br/>
 			</div>

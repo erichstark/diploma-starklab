@@ -18,6 +18,10 @@ module.exports = {
         return _db;
     },
 
+    closeDb: function () {
+        _db.close();
+    },
+
     insertSimulation: function (obj, callback) {
         _db.collection('projectile').insertOne(obj, function (err, result) {
             //_db.close();

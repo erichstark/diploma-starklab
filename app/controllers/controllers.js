@@ -81,14 +81,17 @@
         }])
         .controller('ResultsCtrl', ['$scope', '$http', '$cookies', '$interval', function ($scope, $http, $cookies, $interval) {
             $scope.dashboardAvailable = false;
+            $scope.showDatabaseProblem = true;
             $scope.results = [];
             $scope.detailResult = [];
             $scope.sampling = 1;
 
             $http.get('/mongo/' + $cookies.get('username') + '/projectile').then(function (response) {
                 $scope.results = response.data;
+                $scope.showDatabaseProblem = false;
 
             }, function (response) {
+                $scope.showDatabaseProblem = true;
                 console.log('error: ', response);
             });
 
