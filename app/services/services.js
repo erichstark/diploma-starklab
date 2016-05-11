@@ -1,8 +1,8 @@
 (function (angular) {
-    "use strict";
-    angular.module("starkLab.services", [])
-        .factory("socketio", ['$rootScope', function ($rootScope) {
-            var socket = io.connect("http://localhost:4000");
+    'use strict';
+    angular.module('starkLab.services', [])
+        .factory('socketio', ['$rootScope', function ($rootScope) {
+            var socket = io.connect('http://localhost:4000');
             return {
                 on: function (eventName, callback) {
                     socket.on(eventName, function () {
@@ -24,7 +24,7 @@
                 }
             };
         }])
-        .factory("ProjectileDataObject", ['$http', function ($http) {
+        .factory('ProjectileDataObject', ['$http', function ($http) {
             function ProjectileDataObject(user, time, x, y, vy) {
                 this.user = user;
                 this.experiment = 'projectile';
@@ -34,11 +34,6 @@
                 this.y = y;
                 this.vy = vy;
             }
-
-            // public function
-            ProjectileDataObject.prototype.NazovMetody = function () {
-
-            };
 
             return ProjectileDataObject;
         }]);

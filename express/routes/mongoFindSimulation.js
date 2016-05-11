@@ -1,6 +1,6 @@
 var mongoUtil = require('../mongoUtil');
 
-module.exports = function(req, res) {
+module.exports = function (req, res) {
     mongoUtil.connectToServer(function (err) {
         if (err == null) {
             var checkedId = undefined;
@@ -14,8 +14,6 @@ module.exports = function(req, res) {
                 experiment: req.params.simulation,
                 id: checkedId
             };
-
-            console.log("user:", simulationParams);
 
             mongoUtil.findSimulation(simulationParams, function (err, results) {
                 res.setHeader('Content-Type', 'application/json');

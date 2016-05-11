@@ -2,7 +2,6 @@
   "name": "StarkLab",
   "version": "0.3.0",
   "private": true,
-  "main": "index.js",
   "scripts": {
     "start": "node ./express/bin/web.js",
     "watch": "nodemon ./express/bin/web.js"
@@ -21,6 +20,7 @@
     "chart.js": "1.1.x",
     "express": "4.13.4",
     "express-session": "^1.13.0",
+    "font-awesome": "^4.6.1",
     "jquery": "^2.2.3",
     "ldapjs": "^1.0.0",
     "material-design-lite": "^1.1.3",

@@ -1,6 +1,6 @@
 (function (angular) {
-    "use strict";
-    angular.module("starkLab.controllers", [])
+    'use strict';
+    angular.module('starkLab.controllers', [])
         .controller('TableCtrl', ['$scope', '$http', '$cookies', '$interval', 'socketio', 'ProjectileDataObject', function ($scope, $http, $cookies, $interval, socketio, ProjectileDataObject) {
             $scope.hideFullTable = true;
 
@@ -15,27 +15,23 @@
 
             $scope.fullData = [];
 
-
             var timeoutId;
             var update = 0;
 
             var loggedUser = $cookies.get('username');
 
-            console.log("cookies: ", loggedUser);
-
             socketio.on('message:' + loggedUser, function (msg) {
 
                 // register interval when array from matlab is empty
-                if (msg.result.status === "running" && !angular.isArray(msg.result.data.time)) {
-                    console.log("Simulation status running...");
+                if (msg.result.status === 'running' && !angular.isArray(msg.result.data.time)) {
+                    console.log('Simulation status running...');
 
                     timeoutId = $interval(function () {
-                        //console.log("concatedXData: ", update, concatedXData, concatedXData.length);
 
                         // run animation when some data is available
                         if (concatedXData && concatedXData.length > 300) {
                             if (update + 20 >= concatedXData.length) {
-                                console.log("OUT");
+                                console.log('OUT');
                                 $scope.myLiveChart.addData([concatedYData[concatedYData.length - 1]], concatedXData[concatedXData.length - 1]);
                                 $scope.redrawCanvas(concatedXData[concatedXData.length - 1], concatedYData[concatedYData.length - 1]);
 
@@ -48,9 +44,7 @@
 
                                 $interval.cancel(timeoutId);
                             } else {
-                                console.log("IN");
-                                //$scope.myLiveChart.addData([concatedYData[update]], concatedXData[update]);
-                                $scope.myLiveChart.addData([concatedYData[update]], "");
+                                $scope.myLiveChart.addData([concatedYData[update]], '');
                                 $scope.redrawCanvas(concatedXData[update], concatedYData[update]);
                                 $scope.rows.push({
                                     x: concatedXData[update],
@@ -65,7 +59,7 @@
                     }, 200);
                 }
 
-                if (msg.result.status === "running" && angular.isArray(msg.result.data.time)) {
+                if (msg.result.status === 'running' && angular.isArray(msg.result.data.time)) {
 
                     if ($scope.$parent.showOverlay) {
                         $scope.$parent.showOverlay = false;
@@ -76,51 +70,34 @@
                     concatedYData = concatedYData.concat(msg.result.data.y);
                     concatedVyData = concatedVyData.concat(msg.result.data.vy);
 
-                } else if (msg.result.status === "stopped") {
-                    console.log("Simulation status stopped...");
+                } else if (msg.result.status === 'stopped') {
+                    console.log('Simulation status stopped...');
 
                     var obj = new ProjectileDataObject(loggedUser, concatedTimeData, concatedXData, concatedYData, concatedVyData);
 
-                    // FIXME: need cleanup after insert
-                    insertDataToDatabase(obj);
+                    $http.post('/mongo/insert/one', obj);
                 }
             });
-
-            function insertDataToDatabase(obj) {
-                console.log("insertAllData started...");
-
-                // then function if sends correctly
-                $http.post('/mongo/insert/one', obj);
-            }
-
         }])
-        .controller("ResultsCtrl", ["$scope", "$http", "$cookies", "$interval", function ($scope, $http, $cookies, $interval) {
-            console.log("ResultsCtrl started...");
-
+        .controller('ResultsCtrl', ['$scope', '$http', '$cookies', '$interval', function ($scope, $http, $cookies, $interval) {
             $scope.dashboardAvailable = false;
-
             $scope.results = [];
-
             $scope.detailResult = [];
-
             $scope.sampling = 1;
 
             $http.get('/mongo/' + $cookies.get('username') + '/projectile').then(function (response) {
-                console.log("Mongo get all results: ", response.data);
-
                 $scope.results = response.data;
 
             }, function (response) {
-                console.log("error: ", response);
+                console.log('error: ', response);
             });
 
             $scope.showDetails = function (detail) {
-                console.log("detail ID: ", detail);
-
                 $scope.detailResult = detail;
                 $scope.rows = [];
 
-                for (var i = 0; i < $scope.detailResult.time.length; i++) {
+                var i;
+                for (i = 0; i < $scope.detailResult.time.length; i++) {
                     $scope.rows.push({
                         x: $scope.detailResult.x[i],
                         y: $scope.detailResult.y[i],
@@ -138,7 +115,7 @@
 
                 var array = $scope.detailResult.y;
                 var numId = 0;
-                for (var i = 0; i < array.length; i++) {
+                for (i = 0; i < array.length; i++) {
                     // pocet rozumnych cisel pre vzorkovanie, aby posledna hodnota y bola blizko 0
                     var num = (array.length - ( Math.floor(array.length / i) * i));
                     // i by malo byt mensie ako 1/3 z pola, cize aby sa dali vykreslit aspon 3 vysledky
@@ -148,7 +125,7 @@
                 }
 
                 setTimeout(function () {
-                    var element = document.getElementById("simulation-view");
+                    var element = document.getElementById('simulation-view');
                     element.scrollIntoView();
                 }, 500);
             };
@@ -157,15 +134,10 @@
                 var index = $scope.results.indexOf(sim);
                 var simId = sim._id;
 
-                console.log("simIDDD: ", simId);
-
                 $scope.results.splice(index, 1);
 
                 $http.delete('/mongo/delete/' + simId).then(function (response) {
-                    console.log("Mongo remove one: ", response.data);
-
                 }, function (response) {
-                    console.log("mongo remove error: ", response);
                 });
             };
 
@@ -180,10 +152,8 @@
                 var timeCount = 0;
                 var timeFinished = 0;
 
-                console.log("select: ", typeof $scope.data.repeatSelect);
-
                 if ($scope.data.repeatSelect) {
-                    sampling = parseInt($scope.data.repeatSelect); //$scope.sampling;
+                    sampling = parseInt($scope.data.repeatSelect);
                 }
 
                 if ($scope.detailResult && $scope.detailResult.time) {
@@ -196,10 +166,7 @@
 
 
                 timeoutId = $interval(function () {
-
-                    //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
-                        //console.log("run canvas int inside", $scope.detailResult.y[update]);
                         $scope.myResultsChart.addData([$scope.detailResult.y[update]], $scope.detailResult.x[update]);
 
                         update = update + sampling;
@@ -208,10 +175,8 @@
                     }
 
                 }, timeoutNumber);
-
-
             };
-            
+
             $scope.showGraph = function () {
 
                 $scope.refreshData();
@@ -222,17 +187,16 @@
 
                 if ($scope.data.repeatSelect) {
                     sampling = parseInt($scope.data.repeatSelect);
-                    console.log("sample: ", sampling);
 
-
+                    var i;
                     if ($scope.data.repeatSelect > 25) {
-                        for (var i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
+                        for (i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
                             tmpX.push($scope.detailResult.x[i]);
                             tmpY.push($scope.detailResult.y[i]);
                         }
                     } else {
-                        for (var i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
-                            tmpX.push("");
+                        for (i = 0; i < $scope.detailResult.x.length; i = i + sampling) {
+                            tmpX.push('');
                             tmpY.push($scope.detailResult.y[i]);
                         }
                     }
@@ -251,7 +215,6 @@
                 var timeCount = 0;
                 var timeFinished = 0;
 
-
                 if ($scope.data.repeatSelect) {
                     sampling = parseInt($scope.data.repeatSelect);
                 }
@@ -265,10 +228,7 @@
                 }
 
                 timeoutId = $interval(function () {
-
-                    //console.log("run canvas", $scope.sampling, $scope.detailResult, $scope.detailResult.time[$scope.detailResult.time.length - 1], $scope.detailResult.time.length);
                     if (update < $scope.detailResult.x.length) {
-                        //console.log("run canvas int inside", $scope.detailResult.y[update]);
                         $scope.redrawCanvas($scope.detailResult.x[update], $scope.detailResult.y[update]);
                         update = update + sampling;
                     } else {
@@ -282,21 +242,20 @@
                 $scope.myResultsChart.destroy();
                 $scope.myResultsChart.clear();
 
-                console.log("scope ctrl: ", $scope);
+                console.log('scope ctrl: ', $scope);
                 $scope.resetCanvas();
             };
 
             $scope.exportHTMLTable = function () {
-                $("#export-2").tableToCSV($scope.detailResult.executed);
+                $('#export-2').tableToCSV($scope.detailResult.executed);
             };
         }])
-        .controller("SectionsCtrl", ["$scope", "$cookies", function ($scope, $cookies) {
-            console.log("SectionsCtrl started...");
+        .controller('SectionsCtrl', ['$scope', '$cookies', function ($scope, $cookies) {
             $scope.loggedUser = $cookies.get('username');
             $scope.showOverlay = false;
 
             this.selected = 0;
-            this.headerName = "Simulácia šikmého vrhu";
+            this.headerName = 'Simulácia šikmého vrhu';
 
             this.selectSection = function (selected, headerName) {
                 this.selected = selected;
@@ -307,30 +266,22 @@
                 return this.selected === checkNumber;
             };
         }])
-        .controller("SimulationCtrl", ["$scope", "$http", function ($scope, $http) {
-            console.log("SimulationCtrl started...");
-
+        .controller('SimulationCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.runMatlabWithParams = function (v0, alfa_deg) {
-
-                console.log("scope simulation: ", $scope);
-
                 if (v0 && alfa_deg) {
                     var data = {
                         'v0': v0,
-                        'alfa_deg' : alfa_deg
+                        'alfa_deg': alfa_deg
                     };
 
-                    $http.post("/matlab/run", data).then(function (response) {
-                        console.log("Express said: ", response.data);
+                    $http.post('/matlab/run', data).then(function (response) {
 
                         // vybrat prvy tab kde sa zobrazia data
                         $scope.$parent.section.selectSection(1, 'Realtime údaje');
                         $scope.$parent.showOverlay = true;
 
-                        // nastavenie simulacie na spustenu a schovat dalsie spustenie pre usera kym sa neskoci prva
-
                     }, function (response) {
-                        console.log("error: ", response);
+                        console.log('error: ', response);
                     });
                 }
             };

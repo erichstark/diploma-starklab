@@ -1,13 +1,13 @@
 (function (document, angular) {
-    "use strict";
-    angular.module("starkLab.directives", [])
-        .directive('uiProjectile', ['$interval', 'dateFilter', function ($interval, dateFilter) {
+    'use strict';
+    angular.module('starkLab.directives', [])
+        .directive('uiProjectile', ['$interval', function ($interval) {
             return {
                 restrict: 'E',
                 template: '<canvas width="600" height="300">Tento prehliadac nepodporuje canvas.</canvas>',
 
                 link: function (scope, element, attrs, ngModelCtrl) {
-                    console.log("Start directive uiProjectile");
+                    console.log('Start directive uiProjectile');
                     var format,
                         timeoutId;
 
@@ -18,17 +18,7 @@
                     var y = 0;
                     var update = 0;
 
-                    // only for test purpose
-                    // var v0      = 50;    // [m/s] pociatocna rychlost v smere hodu
-                    // var alfa_deg= 60;    // [deg] uhol vrhu v stupnoch
-                    // var g = 9.81;        // [m/s^2] gravitacne zrychlenie
-                    // var alfa_rad = alfa_deg*2* Math.PI/360;   //% [rad] uhol vrhu v radianoch
-                    // var cas = 0;
-
                     var canvas = element.find('canvas')[0];
-                    console.log("get element ", canvas);
-                    console.log("angular element ", element.find('canvas')[0]);
-
                     var ctx = canvas.getContext('2d');
 
                     // transform x,y to down - default is up
@@ -63,13 +53,11 @@
 
 
                     function redrawCanvas() {
-                        if (inputData === "undefined" && update < inputData.x.length) {
-                            console.log("x:", x);
+                        if (inputData === 'undefined' && update < inputData.x.length) {
                             x = inputData.x[update];
                             y = inputData.y[update];
                             update++;
                         } else {
-                            console.log("else");
                             $interval.cancel(timeoutId);
                         }
 
@@ -87,15 +75,6 @@
                         drawBall(ctx);
                     };
 
-                    // functions to count x, y
-                    function countX() {
-                        return cas * v0 * Math.cos(alfa_rad);
-                    }
-
-                    function countY() {
-                        return cas * v0 * Math.sin(alfa_rad) - (g * Math.pow(cas, 2)) / 2;
-                    }
-
                     element.on('$destroy', function () {
                         $interval.cancel(timeoutId);
                     });
@@ -110,13 +89,13 @@
         .directive('uiTable', ['$interval', function ($interval) {
             var uniqueId = 1;
             return {
-                restrict: "E",
+                restrict: 'E',
                 templateUrl: './templates/table.html',
                 link: {
                     post: function (scope, element, attrs, ctrl) {
                         scope.uniqueId = 'export-' + uniqueId++;
 
-                        // scope.$watchCollection("rows", function (val) {
+                        // scope.$watchCollection('rows', function (val) {
                         //     if (val) {
                         //         element[0].scrollIntoView(false);
                         //     }
@@ -127,7 +106,7 @@
         }])
         .directive('uiGraph', ['$interval', function ($interval) {
             return {
-                restrict: "E",
+                restrict: 'E',
                 template: '<canvas id="results-chart" width="600" height="300"></canvas>',
                 scope: {
 
@@ -141,10 +120,10 @@
                                 labels: [1],
                                 datasets: [
                                     {
-                                        fillColor: "rgba(220,220,220,0.2)",
-                                        strokeColor: "rgba(220,220,220,1)",
-                                        pointColor: "rgba(220,220,220,1)",
-                                        pointStrokeColor: "#fff",
+                                        fillColor: 'rgba(220,220,220,0.2)',
+                                        strokeColor: 'rgba(220,220,220,1)',
+                                        pointColor: 'rgba(220,220,220,1)',
+                                        pointStrokeColor: '#fff',
                                         data: {}
                                     }
                                 ]
@@ -157,9 +136,9 @@
                                 maintainAspectRatio: true
                             };
 
-                        if (attrs["type"] == "results") {
+                        if (attrs['type'] == 'results') {
                             scope.$parent.myResultsChart = new Chart(ctxResults).Line(startingDataResults, options);
-                        } else if (attrs["type"] == "realtime") {
+                        } else if (attrs['type'] == 'realtime') {
                             scope.$parent.myLiveChart = new Chart(ctxResults).Line(startingDataResults, options);
                         }
 
@@ -170,18 +149,18 @@
                                     labels: [1],
                                     datasets: [
                                         {
-                                            fillColor: "rgba(220,220,220,0.2)",
-                                            strokeColor: "rgba(220,220,220,1)",
-                                            pointColor: "rgba(220,220,220,1)",
-                                            pointStrokeColor: "#fff",
+                                            fillColor: 'rgba(220,220,220,0.2)',
+                                            strokeColor: 'rgba(220,220,220,1)',
+                                            pointColor: 'rgba(220,220,220,1)',
+                                            pointStrokeColor: '#fff',
                                             data: {}
                                         }
                                     ]
                                 };
 
-                            if (attrs["type"] == "results") {
+                            if (attrs['type'] == 'results') {
                                 scope.$parent.myResultsChart = new Chart(ctx).Line(data, options);
-                            } else if (attrs["type"] == "realtime") {
+                            } else if (attrs['type'] == 'realtime') {
                                 scope.$parent.myLiveChart = new Chart(ctx).Line(data, options);
                             }
                         };
@@ -193,18 +172,18 @@
                                 labels: x,
                                 datasets: [
                                     {
-                                        fillColor: "rgba(220,220,220,0.2)",
-                                        strokeColor: "rgba(220,220,220,1)",
-                                        pointColor: "rgba(220,220,220,1)",
-                                        pointStrokeColor: "#fff",
+                                        fillColor: 'rgba(220,220,220,0.2)',
+                                        strokeColor: 'rgba(220,220,220,1)',
+                                        pointColor: 'rgba(220,220,220,1)',
+                                        pointStrokeColor: '#fff',
                                         data: y
                                     }
                                 ]
                             };
 
-                            if (attrs["type"] == "results") {
+                            if (attrs['type'] == 'results') {
                                 scope.$parent.myResultsChart = new Chart(ctx).Line(data, options);
-                            } else if (attrs["type"] == "realtime") {
+                            } else if (attrs['type'] == 'realtime') {
                                 scope.$parent.myLiveChart = new Chart(ctx).Line(data, options);
                             }
 

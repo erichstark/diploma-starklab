@@ -17,7 +17,14 @@ var mongoDeleteOneRouter = require('./express/routes/mongoDeleteOne');
 var app = express();
 
 // max age v sec * 1000, nastavit unlimited, delete az po logout
-app.use(session({key: 'userID', secret: 'starkLab mouse', cookie: { maxAge: 900000 }, rolling: true, resave: false, saveUninitialized: false }));
+app.use(session({
+    key: 'userID',
+    secret: 'starkLab mouse',
+    cookie: {maxAge: 900000},
+    rolling: true,
+    resave: false,
+    saveUninitialized: false
+}));
 
 // increased limit because of Error: request entity too large
 // support json encoded bodies
@@ -50,7 +57,6 @@ app.post('/matlab/result', matlabResultRouter);
 app.post('/mongo/insert/one', mongoInsertOneRouter);
 app.get('/mongo/:user/:simulation?/:id?', mongoFindSimulationRouter);
 app.delete('/mongo/delete/:id', mongoDeleteOneRouter);
-
 
 
 module.exports = app;
