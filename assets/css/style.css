@@ -119,19 +119,21 @@ button {
 
 .ui-graph-master {
 	position: relative;
+	width: 600px;
+	height: 310px;
 }
 
 .ui-graph-left {
 	position: absolute;
-	top: 120px;
+	top: 0;
 }
 
 .ui-graph-bottom {
 	position: absolute;
-	left: 280px;
-	bottom: -5px;
+	bottom: 0;
+	right: -35px;
 }
 
 div > canvas {
-	margin-left: 20px;
+	margin-left: 35px;
 }

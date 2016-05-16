@@ -184,7 +184,7 @@
         .directive('uiGraph', ['$interval', function ($interval) {
             return {
                 restrict: 'E',
-                template: '<div class="ui-graph-master"><div class="ui-graph-left">[y]</div><canvas id="results-chart" width="600" height="300"></canvas><div class="ui-graph-bottom">[x]</div></div>',
+                template: '<div class="ui-graph-master"><div class="ui-graph-left">y [m]</div><canvas width="600" height="300"></canvas><div class="ui-graph-bottom">x [m]</div></div>',
                 scope: {
 
                 },
