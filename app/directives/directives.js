@@ -62,8 +62,8 @@
                     function drawLegend() {
                         ctx.beginPath();
                         ctx.font = "15px Arial";
-                        ctx.fillText("[y]", 5, 145);
-                        ctx.fillText("[x]", 270, 295);
+                        ctx.fillText("y [m]", 0, 12);
+                        ctx.fillText("x [m]", 568, 295);
                     }
 
                     function drawPositionX() {
@@ -217,6 +217,7 @@
                         } else if (attrs['type'] == 'realtime') {
                             scope.$parent.myLiveChart = new Chart(ctxResults).Line(startingDataResults, options);
                         }
+                        
 
                         scope.$parent.resetCanvas = function () {
                             var ctx = canvasResults.getContext('2d');
