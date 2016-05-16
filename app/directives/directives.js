@@ -184,13 +184,12 @@
         .directive('uiGraph', ['$interval', function ($interval) {
             return {
                 restrict: 'E',
-                template: '<canvas id="results-chart" width="600" height="300"></canvas>',
+                template: '<div class="ui-graph-master"><div class="ui-graph-left">[y]</div><canvas id="results-chart" width="600" height="300"></canvas><div class="ui-graph-bottom">[x]</div></div>',
                 scope: {
 
                 },
                 link: {
                     post: function (scope, element, attrs, ctrl) {
-
                         var canvasResults = element.find('canvas')[0],
                             ctxResults = canvasResults.getContext('2d'),
                             startingDataResults = {

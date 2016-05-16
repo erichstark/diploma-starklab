@@ -63,13 +63,18 @@ table.table-data > thead > tr > th {
 	width: 100px;
 }
 
+table.table-data > thead > tr > th:last-child {
+	width: 155px;
+}
+
+
 div.table-scroll {
 	overflow: scroll;
 	height: 380px;
 }
 
 div.table-size {
-	max-width: 300px;
+	max-width: 370px;
 	max-height: 500px;
 }
 
@@ -110,4 +115,23 @@ button {
 
 .overlay-waiting > .awe > i {
 	font-size: 20em;
+}
+
+.ui-graph-master {
+	position: relative;
+}
+
+.ui-graph-left {
+	position: absolute;
+	top: 120px;
+}
+
+.ui-graph-bottom {
+	position: absolute;
+	left: 280px;
+	bottom: -5px;
+}
+
+div > canvas {
+	margin-left: 20px;
 }
