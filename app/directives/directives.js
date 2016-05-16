@@ -21,15 +21,8 @@
                     var canvas = element.find('canvas')[0];
                     var ctx = canvas.getContext('2d');
 
-                    // transform x,y to down - default is up
-                    // http://stackoverflow.com/questions/4335400/in-html5-canvas-can-i-make-the-y-axis-go-up-rather-than-down
-                    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
-                    ctx.transform(1, 0, 0, -1, 0, canvas.height);
-
                     redrawCanvas();
 
-
-                    // asi by bolo lepsie presunut funkcie do controlleru pre tuto directivu
                     function drawAxis() {
                         // draw x line
                         ctx.beginPath();
@@ -44,13 +37,73 @@
                         ctx.stroke();
                     }
 
-                    function drawBall() {
+                    function drawArrowY() {
                         ctx.beginPath();
-
-                        ctx.arc(x + 25, y + 25, 5, 0, 2 * Math.PI);
+                        ctx.moveTo(20,30);
+                        ctx.lineTo(30,30);
+                        ctx.lineTo(25,20);
                         ctx.fill();
                     }
 
+                    function drawArrowX() {
+                        ctx.beginPath();
+                        ctx.moveTo(585,275);
+                        ctx.lineTo(575,280);
+                        ctx.lineTo(575,270);
+                        ctx.fill();
+                    }
+
+                    function drawBall() {
+                        ctx.beginPath();
+                        ctx.arc(x + 25, y + 25, 5, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                    
+                    function drawLegend() {
+                        ctx.beginPath();
+                        ctx.font = "15px Arial";
+                        ctx.fillText("[y]", 5, 145);
+                        ctx.fillText("[x]", 270, 295);
+                    }
+
+                    function drawPositionX() {
+                        ctx.beginPath();
+                        ctx.moveTo(25 + x, 30);
+                        ctx.lineTo(25 + x, 20);
+                        ctx.strokeStyle = "black";
+                        ctx.stroke();
+                    }
+
+                    function drawPositionXValue() {
+                        ctx.beginPath();
+                        ctx.font = "10px Arial";
+
+                        if (x < 100) {
+                            ctx.fillText(Math.floor(x), 20 + x, 290);
+                        } else {
+                            ctx.fillText(Math.floor(x), 17 + x, 290);
+                        }
+
+                    }
+
+                    function drawPositionY() {
+                        ctx.beginPath();
+                        ctx.moveTo(20, 25 + y);
+                        ctx.lineTo(30, 25 + y);
+                        ctx.strokeStyle = "black";
+                        ctx.stroke();
+                    }
+
+                    function drawPositionYValue() {
+                        ctx.beginPath();
+                        ctx.font = "10px Arial";
+
+                        if (y < 100) {
+                            ctx.fillText(Math.floor(y), 5, 278 - y);
+                        } else {
+                            ctx.fillText(Math.floor(y), 0, 278 - y);
+                        }
+                    }
 
                     function redrawCanvas() {
                         if (inputData === 'undefined' && update < inputData.x.length) {
@@ -61,18 +114,42 @@
                             $interval.cancel(timeoutId);
                         }
 
+                        // transform x,y to down - default is up
+                        // http://stackoverflow.com/questions/4335400/in-html5-canvas-can-i-make-the-y-axis-go-up-rather-than-down
+                        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
+                        ctx.transform(1, 0, 0, -1, 0, canvas.height);
+
                         ctx.clearRect(0, 0, 600, 300);
                         drawAxis(ctx);
                         drawBall(ctx);
+                        drawPositionX();
+                        drawPositionY();
+
+                        // reset transform to 1 0 0 1 0 0
+                        ctx.resetTransform();
+                        drawPositionXValue();
+                        drawPositionYValue();
+                        drawArrowY();
+                        drawArrowX();
+                        drawLegend();
                     }
 
                     scope.redrawCanvas = function (a, b) {
                         x = a;
                         y = b;
 
+                        ctx.transform(1, 0, 0, -1, 0, canvas.height);
                         ctx.clearRect(0, 0, 600, 300);
                         drawAxis(ctx);
                         drawBall(ctx);
+                        drawPositionX();
+                        drawPositionY();
+                        ctx.resetTransform();
+                        drawPositionXValue();
+                        drawPositionYValue();
+                        drawArrowY();
+                        drawArrowX();
+                        drawLegend();
                     };
 
                     element.on('$destroy', function () {
